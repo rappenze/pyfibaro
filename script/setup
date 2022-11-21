@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Setup the dependencies.
+
+# Stop on errors
+set -e
+
+python3 -m pip install -r requirements.txt

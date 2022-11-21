@@ -1,0 +1,21 @@
+{
+  "name": "pyfibaro dev",
+  "image": "mcr.microsoft.com/devcontainers/python:0-3.10",
+  "postCreateCommand": "script/setup",
+  "settings": {
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
+    "python.formatting.provider": "black",
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "editor.formatOnPaste": false,
+    "editor.formatOnSave": true,
+    "files.trimTrailingWhitespace": true,
+    "terminal.integrated.profiles.linux": {
+      "zsh": {
+        "path": "/usr/bin/zsh"
+      }
+    },
+    "terminal.integrated.defaultProfile.linux": "zsh"
+  }
+}
