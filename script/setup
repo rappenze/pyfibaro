@@ -4,4 +4,12 @@
 # Stop on errors
 set -e
 
+# Runtime dependencies
 python3 -m pip install -r requirements.txt
+
+# Test dependencies
+python3 -m pip install -r requirements-test.txt
+
+# Tools for distribution to pypi.org
+python3 -m pip install --upgrade build
+python3 -m pip install --upgrade twine

@@ -8,6 +8,9 @@
     "python.formatting.provider": "black",
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
+    "python.autoComplete.extraPaths": [
+      ""
+    ],
     "editor.formatOnPaste": false,
     "editor.formatOnSave": true,
     "files.trimTrailingWhitespace": true,

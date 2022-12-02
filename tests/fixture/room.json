@@ -1,0 +1,30 @@
+[
+    {
+        "id": 4,
+        "name": "Wohnen",
+        "sectionID": 4,
+        "icon": "room_sofa",
+        "defaultSensors": {
+            "temperature": 0,
+            "humidity": 0,
+            "light": 0
+        },
+        "defaultThermostat": 0,
+        "sortOrder": 1,
+        "category": "other"
+    },
+    {
+        "id": 5,
+        "name": "Küche",
+        "sectionID": 4,
+        "icon": "room_dining",
+        "defaultSensors": {
+            "temperature": 141,
+            "humidity": 0,
+            "light": 142
+        },
+        "defaultThermostat": 0,
+        "sortOrder": 3,
+        "category": "other"
+    }
+]

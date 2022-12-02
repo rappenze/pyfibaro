@@ -1,0 +1,84 @@
+[
+    {
+        "id": 2,
+        "name": "Go to bed",
+        "type": "com.fibaro.blockScene",
+        "categories": [
+            "other"
+        ],
+        "roomID": 5,
+        "iconID": 5,
+        "runConfig": "TRIGGER_AND_MANUAL",
+        "alexaProhibited": true,
+        "autostart": false,
+        "protectedByPIN": false,
+        "killable": true,
+        "killOtherInstances": false,
+        "maxRunningInstances": 1,
+        "runningInstances": 0,
+        "instances": [],
+        "runningManualInstances": 0,
+        "visible": true,
+        "isLua": false,
+        "properties": "",
+        "triggers": {
+            "properties": [
+                {
+                    "id": 17,
+                    "name": "value"
+                }
+            ],
+            "globals": [
+                "GlobalMode"
+            ],
+            "events": [],
+            "weather": []
+        },
+        "actions": {
+            "devices": [],
+            "scenes": [],
+            "groups": []
+        },
+        "sortOrder": 15
+    },
+    {
+        "id": 10,
+        "name": "Automatic light",
+        "type": "com.fibaro.luaScene",
+        "categories": [
+            "other"
+        ],
+        "roomID": 108,
+        "iconID": 6,
+        "runConfig": "TRIGGER_AND_MANUAL",
+        "alexaProhibited": true,
+        "autostart": false,
+        "protectedByPIN": false,
+        "killable": true,
+        "killOtherInstances": false,
+        "maxRunningInstances": 1,
+        "runningInstances": 0,
+        "instances": [],
+        "runningManualInstances": 0,
+        "visible": true,
+        "isLua": true,
+        "properties": "",
+        "triggers": {
+            "properties": [
+                {
+                    "id": 72,
+                    "name": "value"
+                }
+            ],
+            "globals": [],
+            "events": [],
+            "weather": []
+        },
+        "actions": {
+            "devices": [],
+            "scenes": [],
+            "groups": []
+        },
+        "sortOrder": 57
+    }
+]

@@ -1,0 +1,37 @@
+{
+    "serialNumber": "HC2-011111",
+    "hcName": "My Home",
+    "mac": "00:22:4d:b7:13:24",
+    "zwaveVersion": "3.67",
+    "timeFormat": 24,
+    "zwaveRegion": "EU",
+    "serverStatus": 1652642206,
+    "defaultLanguage": "en",
+    "sunsetHour": "16:39",
+    "sunriseHour": "07:44",
+    "hotelMode": false,
+    "temperatureUnit": "C",
+    "batteryLowNotification": true,
+    "smsManagement": true,
+    "forwardNotificationsToPushMessages": true,
+    "date": "21:22 | 26.11.2022",
+    "softVersion": "4.630",
+    "beta": false,
+    "currentVersion": {
+        "version": "4.630",
+        "type": "stable"
+    },
+    "installVersion": {
+        "version": "",
+        "type": "",
+        "status": "",
+        "progress": 0
+    },
+    "timestamp": 1669494127,
+    "online": true,
+    "tosAccepted": true,
+    "updateStableAvailable": false,
+    "updateBetaAvailable": false,
+    "newestStableVersion": "4.630",
+    "newestBetaVersion": "4.621"
+}

@@ -1,0 +1,25 @@
+{
+    "status": "IDLE",
+    "last": 2639046,
+    "date": "11:26 | 27.11.2022",
+    "timestamp": 1669544810,
+    "logs": [],
+    "events": [
+        {
+            "type": "DevicePropertyUpdatedEvent",
+            "data": {
+                "id": 28,
+                "property": "value",
+                "oldValue": 232.08,
+                "newValue": 232.87
+            }
+        }
+    ],
+    "changes": [
+        {
+            "id": 28,
+            "value": "232.88"
+        }
+    ],
+    "alarmChanges": []
+}
