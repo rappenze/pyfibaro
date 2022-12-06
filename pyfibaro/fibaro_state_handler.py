@@ -3,7 +3,8 @@
 import logging
 import threading
 
-from pyfibaro.common.rest_client import RestClient
+from .common.const import REFRESH_STATE_TIMEOUT
+from .common.rest_client import RestClient
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -43,7 +44,9 @@ class FibaroStateHandler(threading.Thread):
                     break
 
                 try:
-                    state = self._rest_client.get(f"refreshStates?last={last}")
+                    state = self._rest_client.get(
+                        f"refreshStates?last={last}", timeout=REFRESH_STATE_TIMEOUT
+                    )
                     _LOGGER.debug(state)
 
                     last = state.get("last")

@@ -23,6 +23,11 @@ class SceneModel:
         """Scene name"""
         return self.raw_data.get("name")
 
+    @property
+    def room_id(self) -> int:
+        """Room id of the scene or 0 if no room is assigned."""
+        return int(self.raw_data.get("roomID", 0))
+
     def start(self) -> None:
         """Start a scene."""
         if self._api_version == 4:
@@ -43,7 +48,7 @@ class SceneModel:
 
     def _send_action_v5(self, action: str) -> None:
         url = f"scenes/{self.fibaro_id}/{action}"
-        self._rest_client.post(url)
+        self._rest_client.post(url, {})
 
     @staticmethod
     def read_scenes(rest_client: RestClient, api_version: int) -> list[SceneModel]:

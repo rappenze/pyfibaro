@@ -30,6 +30,7 @@ def test_fibaro_scene() -> None:
         assert len(scenes) == 2
         assert scenes[0].fibaro_id == 2
         assert scenes[0].name == "Go to bed"
+        assert scenes[0].room_id == 5
         assert mock.call_count == 3
 
 

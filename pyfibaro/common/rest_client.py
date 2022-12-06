@@ -8,7 +8,7 @@ from requests import Response, Session
 from requests.auth import HTTPBasicAuth
 from requests.exceptions import JSONDecodeError
 
-from .const import HTTP_HEADERS, TIMEOUT
+from .const import DEFAULT_TIMEOUT, HTTP_HEADERS
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -30,18 +30,24 @@ class RestClient:
         """Set the credentials for the fibaro home center."""
         self._session.auth = HTTPBasicAuth(username, password)
 
-    def get(self, endpoint: str, json: Any | None = None) -> Any:
+    def get(
+        self, endpoint: str, json: Any | None = None, timeout: int | None = None
+    ) -> Any:
         """Execute a get request."""
+        current_timeout = timeout if timeout else DEFAULT_TIMEOUT
         response = self._session.get(
-            f"{self._base_url}{endpoint}", json=json, timeout=TIMEOUT
+            f"{self._base_url}{endpoint}", json=json, timeout=current_timeout
         )
 
         return self._process_json_result(response)
 
-    def post(self, endpoint: str, json: Any | None = None) -> Any:
+    def post(
+        self, endpoint: str, json: Any | None = None, timeout: int | None = None
+    ) -> Any:
         """Execute a post request."""
+        current_timeout = timeout if timeout else DEFAULT_TIMEOUT
         response = self._session.post(
-            f"{self._base_url}{endpoint}", json=json, timeout=TIMEOUT
+            f"{self._base_url}{endpoint}", json=json, timeout=current_timeout
         )
 
         return self._process_json_result(response)
