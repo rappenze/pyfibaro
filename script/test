@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 # Run all tests with code coverage.
 
-python3 -m pytest --cov=pyfibaro --cov-report term-missing
+python -m pytest --cov=pyfibaro --cov-report term-missing
