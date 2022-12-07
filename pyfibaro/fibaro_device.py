@@ -75,18 +75,15 @@ class DeviceModel:
             )
 
         url = f"devices/{self.fibaro_id}/action/{action}"
-        if arguments:
-            args_prepared = {"args": arguments}
-            _LOGGER.debug(
-                "Execute %s for device %s with args %s.",
-                action,
-                self.fibaro_id,
-                args_prepared,
-            )
-            return self._rest_client.post(url, json=args_prepared)
 
-        _LOGGER.debug("Execute %s for device %s without args.", action, self.fibaro_id)
-        return self._rest_client.post(url)
+        args_prepared = {"args": arguments} if arguments else {}
+        _LOGGER.debug(
+            "Execute %s for device %s with args %s.",
+            action,
+            self.fibaro_id,
+            args_prepared,
+        )
+        return self._rest_client.post(url, json=args_prepared)
 
     @staticmethod
     def read_devices(rest_client: RestClient, api_version: int) -> list[DeviceModel]:
