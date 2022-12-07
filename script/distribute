@@ -4,7 +4,7 @@
 # Delete dist directory to ensure a clean build
 rm -r dist
 
-python3 -m build
+python -m build
 
-python3 -m twine upload dist/*
-# python3 -m twine upload --repository testpypi dist/*
+python -m twine upload dist/*
+# python -m twine upload --repository testpypi dist/*
