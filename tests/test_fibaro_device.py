@@ -1,8 +1,13 @@
 """Test FibaroInfo class."""
+from __future__ import annotations
 
+from typing import Any
+
+import pytest
 import requests_mock
 
 from pyfibaro.fibaro_client import FibaroClient
+from pyfibaro.fibaro_device import ValueModel
 
 from .test_utils import TEST_BASE_URL, TEST_PASSWORD, TEST_USERNAME, load_fixture
 
@@ -34,9 +39,88 @@ def test_fibaro_device() -> None:
         assert devices[0].type == "com.fibaro.zwavePrimaryController"
         assert devices[0].base_type == ""
         assert devices[0].room_id == 0
+        assert devices[0].has_unit is False
+        assert devices[0].unit is None
+        assert devices[0].has_armed is False
+        assert devices[0].armed is False
+        assert devices[0].has_interface("invalid_interfce") is False
+        assert devices[2].has_interface("energy") is True
+        assert devices[0].has_battery_level is False
+        assert devices[0].battery_level == 0
+        assert devices[0].has_endpoint_id is True
+        assert devices[0].endpoint_id == 0
+        assert devices[0].enabled is True
+        assert devices[0].visible is False
+        assert devices[0].is_plugin is False
+        assert devices[0].value.int_value() == 0
+        assert devices[0].value_2.has_value is False
+
         assert isinstance(devices[0].actions, dict)
         assert isinstance(devices[0].properties, dict)
         assert mock.call_count == 3
+
+
+@pytest.mark.parametrize("test_value", ["true", "True", True, 1, 0.1])
+def test_fibaro_value_true(test_value: Any) -> None:
+    """Test value model"""
+    value = ValueModel({"value": test_value}, "value")
+    assert value.has_value is True
+    assert value.bool_value() is True
+    assert value.bool_value(False) is True
+
+
+@pytest.mark.parametrize("test_value", ["false", "False", False, 0, 0.0])
+def test_fibaro_value_false(test_value: Any) -> None:
+    """Test value model"""
+    value = ValueModel({"value": test_value}, "value")
+    assert value.has_value is True
+    assert value.bool_value() is False
+    assert value.bool_value(True) is False
+
+
+@pytest.mark.parametrize("test_value", ["1", "1.1", 1, 1.1])
+def test_fibaro_value_int(test_value: Any) -> None:
+    """Test value model"""
+    value = ValueModel({"value": test_value}, "value")
+    assert value.has_value is True
+    assert value.int_value() == 1
+
+
+@pytest.mark.parametrize("test_value", ["1", 1])
+def test_fibaro_value_float(test_value: Any) -> None:
+    """Test value model"""
+    value = ValueModel({"value": test_value}, "value")
+    assert value.has_value is True
+    assert value.float_value() == 1
+
+
+@pytest.mark.parametrize("test_value", ["1.1", 1.1])
+def test_fibaro_value_float_2(test_value: Any) -> None:
+    """Test value model"""
+    value = ValueModel({"value": test_value}, "value")
+    assert value.has_value is True
+    assert value.float_value() == 1.1
+
+
+def test_fibaro_value_default() -> None:
+    """Test value model"""
+    value = ValueModel({}, "value")
+    assert value.has_value is False
+    assert value.int_value(1) == 1
+    assert value.float_value(1.1) == 1.1
+    assert value.bool_value(True) is True
+
+
+def test_fibaro_no_value() -> None:
+    """Test value model"""
+    value = ValueModel({}, "value")
+    assert value.has_value is False
+    with pytest.raises(TypeError):
+        value.int_value()
+    with pytest.raises(TypeError):
+        value.float_value()
+    with pytest.raises(TypeError):
+        value.bool_value()
 
 
 def test_fibaro_device_turn_on() -> None:
