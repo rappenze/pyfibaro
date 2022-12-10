@@ -61,10 +61,18 @@ def test_fibaro_device() -> None:
         assert devices[0].brightness == 0
         assert devices[0].current_program == 0
         assert devices[0].current_program_id == 0
+        assert devices[0].has_mode is False
+        assert devices[0].mode == 0
         assert devices[0].has_supported_modes is False
         assert devices[0].supported_modes == []
+        assert devices[0].has_operating_mode is False
+        assert devices[0].operating_mode == 0
         assert devices[0].has_supported_operating_modes is False
         assert devices[0].supported_operating_modes == []
+        assert devices[0].has_thermostat_mode is False
+        assert devices[0].thermostat_mode is None
+        assert devices[0].has_thermostat_operating_state is False
+        assert devices[0].thermostat_operating_state is None
         assert devices[0].has_supported_thermostat_modes is False
         assert devices[0].supported_thermostat_modes == []
         assert devices[0].has_heating_thermostat_setpoint is False
@@ -112,6 +120,22 @@ def test_fibaro_value_float(test_value: Any) -> None:
     assert value.float_value() == 1
 
 
+@pytest.mark.parametrize("test_value", ["1", 1])
+def test_fibaro_value_str(test_value: Any) -> None:
+    """Test value model"""
+    value = ValueModel({"value": test_value}, "value")
+    assert value.has_value is True
+    assert value.str_value() == "1"
+
+
+@pytest.mark.parametrize("test_value", [{"x": 1}, '{"x":1}'])
+def test_fibaro_value_dict(test_value: Any) -> None:
+    """Test value model"""
+    value = ValueModel({"value": test_value}, "value")
+    assert value.has_value is True
+    assert value.dict_value() == {"x": 1}
+
+
 @pytest.mark.parametrize("test_value", ["1.1", 1.1])
 def test_fibaro_value_float_2(test_value: Any) -> None:
     """Test value model"""
@@ -127,6 +151,8 @@ def test_fibaro_value_default() -> None:
     assert value.int_value(1) == 1
     assert value.float_value(1.1) == 1.1
     assert value.bool_value(True) is True
+    assert value.str_value("test") == "test"
+    assert value.dict_value({"x": 1}) == {"x": 1}
 
 
 @pytest.mark.parametrize("test_value", ["true", "True", True, "false", "False", False])
@@ -153,6 +179,10 @@ def test_fibaro_no_value() -> None:
         value.float_value()
     with pytest.raises(TypeError):
         value.bool_value()
+    with pytest.raises(TypeError):
+        value.str_value()
+    with pytest.raises(TypeError):
+        value.dict_value()
 
 
 def test_fibaro_color() -> None:
