@@ -1,7 +1,11 @@
 """Endpoint object to access the endpoint settings/info"""
 from __future__ import annotations
 
+import logging
+
 from .common.rest_client import RestClient
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class SceneModel:
@@ -27,6 +31,11 @@ class SceneModel:
     def room_id(self) -> int:
         """Room id of the scene or 0 if no room is assigned."""
         return int(self.raw_data.get("roomID", 0))
+
+    @property
+    def visible(self) -> bool:
+        """Returns the visible state of the scene."""
+        return self.raw_data.get("visible", True)
 
     def start(self) -> None:
         """Start a scene."""
@@ -54,4 +63,11 @@ class SceneModel:
     def read_scenes(rest_client: RestClient, api_version: int) -> list[SceneModel]:
         """Returns a list of scenes."""
         raw_data: list = rest_client.get("scenes")
-        return [SceneModel(data, rest_client, api_version) for data in raw_data]
+        scenes: list[dict] = []
+        for scene in raw_data:
+            if "id" not in scene or "name" not in scene:
+                _LOGGER.debug("Ignore scene because it does not contain id or name")
+            else:
+                scenes.append(scene)
+
+        return [SceneModel(data, rest_client, api_version) for data in scenes]

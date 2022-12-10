@@ -80,5 +80,8 @@
             "groups": []
         },
         "sortOrder": 57
+    },
+    {
+        "name": "invalid scene"
     }
 ]

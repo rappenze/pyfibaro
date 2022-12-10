@@ -7,7 +7,7 @@ import pytest
 import requests_mock
 
 from pyfibaro.fibaro_client import FibaroClient
-from pyfibaro.fibaro_device import ValueModel
+from pyfibaro.fibaro_device import ColorModel, DeviceModel, ValueModel
 
 from .test_utils import TEST_BASE_URL, TEST_PASSWORD, TEST_USERNAME, load_fixture
 
@@ -54,6 +54,21 @@ def test_fibaro_device() -> None:
         assert devices[0].is_plugin is False
         assert devices[0].value.int_value() == 0
         assert devices[0].value_2.has_value is False
+        assert devices[0].color.has_color is False
+        assert devices[0].last_color_set.has_color is False
+        assert devices[0].state.has_value is False
+        assert devices[0].has_brightness is False
+        assert devices[0].brightness == 0
+        assert devices[0].current_program == 0
+        assert devices[0].current_program_id == 0
+        assert devices[0].supported_modes == []
+        assert devices[0].supported_operating_modes == []
+        assert devices[0].supported_thermostat_modes == []
+        assert devices[0].has_heating_thermostat_setpoint is False
+        assert devices[0].heating_thermostat_setpoint == 0
+        assert devices[0].has_heating_thermostat_setpoint_future is False
+        assert devices[0].heating_thermostat_setpoint_future == 0
+        assert devices[0].target_level == 0
 
         assert isinstance(devices[0].actions, dict)
         assert isinstance(devices[0].properties, dict)
@@ -111,6 +126,20 @@ def test_fibaro_value_default() -> None:
     assert value.bool_value(True) is True
 
 
+@pytest.mark.parametrize("test_value", ["true", "True", True, "false", "False", False])
+def test_fibaro_value_is_bool(test_value: Any) -> None:
+    """Test value model"""
+    value = ValueModel({"value": test_value}, "value")
+    assert value.is_bool_value is True
+
+
+@pytest.mark.parametrize("test_value", [0, 1, "any_value"])
+def test_fibaro_value_is_bool_negative(test_value: Any) -> None:
+    """Test value model"""
+    value = ValueModel({"value": test_value}, "value")
+    assert value.is_bool_value is False
+
+
 def test_fibaro_no_value() -> None:
     """Test value model"""
     value = ValueModel({}, "value")
@@ -121,6 +150,51 @@ def test_fibaro_no_value() -> None:
         value.float_value()
     with pytest.raises(TypeError):
         value.bool_value()
+
+
+def test_fibaro_color() -> None:
+    """Test value model"""
+    value = ColorModel({"color": "0,0,0,0"}, "color")
+    assert value.has_color is True
+    assert value.rgbw_color == (0, 0, 0, 0)
+
+    value = ColorModel({"color": "234,244,255,0"}, "color")
+    assert value.has_color is True
+    assert value.rgbw_color == (234, 244, 255, 0)
+
+    value = ColorModel({"color": "234,255,0"}, "color")
+    assert value.has_color is False
+    with pytest.raises(TypeError):
+        value.rgbw_color
+
+    value = ColorModel({"color": "234,255,0"}, "color_xxxx")
+    assert value.has_color is False
+    with pytest.raises(TypeError):
+        value.rgbw_color
+
+
+@pytest.mark.parametrize("test_value", ["1,2,3,4", ["1", "2", "3", "4"], [1, 2, 3, 4]])
+def test_fibaro_supported_modes(test_value: Any) -> None:
+    """Test modes"""
+    device = DeviceModel({"properties": {"supportedModes": test_value}}, None, 4)
+    assert device.supported_modes == [1, 2, 3, 4]
+
+
+@pytest.mark.parametrize("test_value", ["1,2,3,4", ["1", "2", "3", "4"], [1, 2, 3, 4]])
+def test_fibaro_supported_operating_modes(test_value: Any) -> None:
+    """Test operating modes"""
+    device = DeviceModel(
+        {"properties": {"supportedOperatingModes": test_value}}, None, 4
+    )
+    assert device.supported_operating_modes == [1, 2, 3, 4]
+
+
+def test_fibaro_supported_thermostat_modes() -> None:
+    """Test thermostat modes"""
+    device = DeviceModel(
+        {"properties": {"supportedThermostatModes": ["heat", "auto"]}}, None, 4
+    )
+    assert device.supported_thermostat_modes == ["heat", "auto"]
 
 
 def test_fibaro_device_turn_on() -> None:
