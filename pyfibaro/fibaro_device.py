@@ -201,6 +201,11 @@ class DeviceModel:
         return []
 
     @property
+    def has_supported_modes(self) -> bool:
+        """Returns true if the device has a supported modes property."""
+        return "supportedModes" in self.properties
+
+    @property
     def supported_operating_modes(self) -> list[int]:
         """Returns the supported operating modes, for example for fan or hvac devices."""
         if "supportedOperatingModes" in self.properties:
@@ -212,11 +217,21 @@ class DeviceModel:
         return []
 
     @property
+    def has_supported_operating_modes(self) -> bool:
+        """Returns true if the device has a supported operating modes property."""
+        return "supportedOperatingModes" in self.properties
+
+    @property
     def supported_thermostat_modes(self) -> list[str]:
         """Returns the supported thermostat modes, for example for hvac devices."""
         if "supportedThermostatModes" in self.properties:
             return self.properties.get("supportedThermostatModes")
         return []
+
+    @property
+    def has_supported_thermostat_modes(self) -> bool:
+        """Returns true if the device has a supported thermostat modes property."""
+        return "supportedThermostatModes" in self.properties
 
     @property
     def heating_thermostat_setpoint(self) -> float:

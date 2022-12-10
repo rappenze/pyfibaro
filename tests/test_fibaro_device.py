@@ -61,8 +61,11 @@ def test_fibaro_device() -> None:
         assert devices[0].brightness == 0
         assert devices[0].current_program == 0
         assert devices[0].current_program_id == 0
+        assert devices[0].has_supported_modes is False
         assert devices[0].supported_modes == []
+        assert devices[0].has_supported_operating_modes is False
         assert devices[0].supported_operating_modes == []
+        assert devices[0].has_supported_thermostat_modes is False
         assert devices[0].supported_thermostat_modes == []
         assert devices[0].has_heating_thermostat_setpoint is False
         assert devices[0].heating_thermostat_setpoint == 0
