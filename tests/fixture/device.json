@@ -362,5 +362,8 @@
         "created": 1652642209,
         "modified": 1652642209,
         "sortOrder": 112
+    },
+    {
+        "name": "invalid device"
     }
 ]

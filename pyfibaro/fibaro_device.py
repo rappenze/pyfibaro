@@ -32,7 +32,7 @@ class DeviceModel:
     @property
     def fibaro_id(self) -> int:
         """Device id"""
-        return int(self.raw_data.get("id", 0))
+        return self.raw_data.get("id")
 
     @property
     def name(self) -> str:
@@ -154,6 +154,95 @@ class DeviceModel:
         """Returns the value info."""
         return ValueModel(self.properties, "value2")
 
+    @property
+    def state(self) -> ValueModel:
+        """Returns the state info."""
+        return ValueModel(self.properties, "state")
+
+    @property
+    def color(self) -> ColorModel:
+        """Returns the color info."""
+        return ColorModel(self.properties, "color")
+
+    @property
+    def last_color_set(self) -> ColorModel:
+        """Returns the last set color info."""
+        return ColorModel(self.properties, "lastColorSet")
+
+    @property
+    def brightness(self) -> int:
+        """Returns the brightness of the device. If missing, 0 is returned."""
+        return int(self.properties.get("brightness", 0))
+
+    @property
+    def has_brightness(self) -> bool:
+        """Returns true if the device has a brightness property."""
+        return "brightness" in self.properties
+
+    @property
+    def current_program(self) -> int:
+        """Returns the current program of the device or None."""
+        return int(self.properties.get("currentProgram", 0))
+
+    @property
+    def current_program_id(self) -> int:
+        """Returns the current pogram id of the device or 0."""
+        return int(self.properties.get("currentProgramID", 0))
+
+    @property
+    def supported_modes(self) -> list[int]:
+        """Returns the supported modes, for example for fan or hvac devices."""
+        if "supportedModes" in self.properties:
+            modes = self.properties.get("supportedModes")
+            if isinstance(modes, str):
+                return [int(mode) for mode in modes.split(",")]
+            if isinstance(modes, list):
+                return [int(mode) for mode in modes]
+        return []
+
+    @property
+    def supported_operating_modes(self) -> list[int]:
+        """Returns the supported operating modes, for example for fan or hvac devices."""
+        if "supportedOperatingModes" in self.properties:
+            modes = self.properties.get("supportedOperatingModes")
+            if isinstance(modes, str):
+                return [int(mode) for mode in modes.split(",")]
+            if isinstance(modes, list):
+                return [int(mode) for mode in modes]
+        return []
+
+    @property
+    def supported_thermostat_modes(self) -> list[str]:
+        """Returns the supported thermostat modes, for example for hvac devices."""
+        if "supportedThermostatModes" in self.properties:
+            return self.properties.get("supportedThermostatModes")
+        return []
+
+    @property
+    def heating_thermostat_setpoint(self) -> float:
+        """Returns the heating thermostat setpoint or 0 if there is no value."""
+        return float(self.properties.get("heatingThermostatSetpoint", 0.0))
+
+    @property
+    def has_heating_thermostat_setpoint(self) -> bool:
+        """Returns true if the device has a heating thermostat setpoint property."""
+        return "heatingThermostatSetpoint" in self.properties
+
+    @property
+    def heating_thermostat_setpoint_future(self) -> float:
+        """Returns the heating thermostat setpoint future or 0 if there is no value."""
+        return float(self.properties.get("heatingThermostatSetpointFuture", 0.0))
+
+    @property
+    def has_heating_thermostat_setpoint_future(self) -> bool:
+        """Returns true if the device has a heating thermostat setpoint future property."""
+        return "heatingThermostatSetpointFuture" in self.properties
+
+    @property
+    def target_level(self) -> float:
+        """Returns the target level or 0 if there is no value."""
+        return float(self.properties.get("targetLevel", 0.0))
+
     def execute_action(self, action: str, arguments: list[Any] | None = None) -> Any:
         """Execute a device action.
 
@@ -185,10 +274,12 @@ class DeviceModel:
         """Returns a list of devices."""
         raw_data: list[dict] = rest_client.get("devices")
 
-        devices: list[DeviceModel] = []
+        devices: list[dict] = []
         for device in raw_data:
             if device.get("type") in IGNORE_DEVICE:
                 _LOGGER.debug("Ignore device: %s", device.get("id"))
+            elif "id" not in device or "name" not in device:
+                _LOGGER.debug("Ignore device because it does not contain id or name")
             else:
                 devices.append(device)
         return [DeviceModel(data, rest_client, api_version) for data in devices]
@@ -206,6 +297,20 @@ class ValueModel:
     def has_value(self) -> bool:
         """Returns true if the device has a value property."""
         return self._property_name in self._properties
+
+    @property
+    def is_bool_value(self) -> bool:
+        """Returns True if the device value property is a bool,
+        either as string or real bool type.
+        """
+        if self.has_value:
+            value = self._properties.get(self._property_name)
+            if isinstance(value, bool):
+                return True
+            if isinstance(value, str):
+                return value.lower() in ("true", "false")
+
+        return False
 
     def int_value(self, default: int | None = None) -> int:
         """Returns the value converted to int or default if
@@ -255,3 +360,39 @@ class ValueModel:
             if default is None:
                 raise ex
             return default
+
+
+class ColorModel:
+    """Model to read out the color."""
+
+    def __init__(self, properties: dict, property_name: str) -> None:
+        """Constructor."""
+        self._properties = properties
+        self._property_name = property_name
+
+    @property
+    def has_color(self) -> bool:
+        """Returns true if the device has a value property."""
+        if self._property_name in self._properties:
+            try:
+                self.rgbw_color
+                return True
+            except TypeError:
+                return False
+        return False
+
+    @property
+    def rgbw_color(self) -> tuple[int, int, int, int]:
+        """Returns the color as RGBW value.
+        For RGB devices the white value is reported as 0.
+
+        Raises:
+        TypeError is raised for invalid values.
+        """
+        color = self._properties.get(self._property_name)
+        if color is None:
+            raise TypeError("Color is None.")
+        rgbw = tuple(int(i) for i in color.split(","))
+        if len(rgbw) != 4:
+            raise TypeError(f"Color does not have 4 parts: {color}")
+        return rgbw
