@@ -86,7 +86,7 @@ def test_fibaro_device() -> None:
         assert mock.call_count == 3
 
 
-@pytest.mark.parametrize("test_value", ["true", "True", True, 1, 0.1])
+@pytest.mark.parametrize("test_value", ["true", "True", True, 1, 0.1, "1", "0.1"])
 def test_fibaro_value_true(test_value: Any) -> None:
     """Test value model"""
     value = ValueModel({"value": test_value}, "value")
@@ -95,7 +95,7 @@ def test_fibaro_value_true(test_value: Any) -> None:
     assert value.bool_value(False) is True
 
 
-@pytest.mark.parametrize("test_value", ["false", "False", False, 0, 0.0])
+@pytest.mark.parametrize("test_value", ["false", "False", False, 0, 0.0, "0", "0.0"])
 def test_fibaro_value_false(test_value: Any) -> None:
     """Test value model"""
     value = ValueModel({"value": test_value}, "value")

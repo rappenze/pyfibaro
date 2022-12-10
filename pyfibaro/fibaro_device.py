@@ -424,7 +424,9 @@ class ValueModel:
             if isinstance(value, bool):
                 return value
             if isinstance(value, str):
-                return value.lower() == "true"
+                if self.is_bool_value:
+                    return value.lower() == "true"
+                return self.float_value(0) != 0
             if isinstance(value, (int, float)):
                 return value != 0
             raise TypeError(f"Value cannot be converted to bool {value}")
