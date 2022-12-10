@@ -1,6 +1,7 @@
 """Endpoint object to access the endpoint settings/info"""
 from __future__ import annotations
 
+import json
 import logging
 from typing import Any
 
@@ -190,6 +191,16 @@ class DeviceModel:
         return int(self.properties.get("currentProgramID", 0))
 
     @property
+    def mode(self) -> int:
+        """Returns the mode or 0 if there is no mode."""
+        return int(self.properties.get("mode", 0))
+
+    @property
+    def has_mode(self) -> bool:
+        """Returns true if the device has a mode."""
+        return "mode" in self.properties
+
+    @property
     def supported_modes(self) -> list[int]:
         """Returns the supported modes, for example for fan or hvac devices."""
         if "supportedModes" in self.properties:
@@ -206,6 +217,16 @@ class DeviceModel:
         return "supportedModes" in self.properties
 
     @property
+    def operating_mode(self) -> int:
+        """Returns the operating mode or 0 if there is no operating mode."""
+        return int(self.properties.get("operatingMode", 0))
+
+    @property
+    def has_operating_mode(self) -> bool:
+        """Returns true if the device has a operating mode."""
+        return "operatingMode" in self.properties
+
+    @property
     def supported_operating_modes(self) -> list[int]:
         """Returns the supported operating modes, for example for fan or hvac devices."""
         if "supportedOperatingModes" in self.properties:
@@ -220,6 +241,28 @@ class DeviceModel:
     def has_supported_operating_modes(self) -> bool:
         """Returns true if the device has a supported operating modes property."""
         return "supportedOperatingModes" in self.properties
+
+    @property
+    def thermostat_mode(self) -> str | None:
+        """Returns the thermostat mode or None if there is no thermostat mode."""
+        return self.properties.get("thermostatMode")
+
+    @property
+    def has_thermostat_mode(self) -> bool:
+        """Returns true if the device has a thermostat mode."""
+        return "thermostatMode" in self.properties
+
+    @property
+    def thermostat_operating_state(self) -> str | None:
+        """Returns the thermostat operating state or None if there
+        is no thermostat operating state.
+        """
+        return self.properties.get("thermostatOperatingState")
+
+    @property
+    def has_thermostat_operating_state(self) -> bool:
+        """Returns true if the device has a thermostat operating state."""
+        return "thermostatOperatingState" in self.properties
 
     @property
     def supported_thermostat_modes(self) -> list[str]:
@@ -327,6 +370,20 @@ class ValueModel:
 
         return False
 
+    def str_value(self, default: str | None = None) -> str:
+        """Returns the value converted to str or default if
+        the object has no value.
+
+        Raises:
+        If no default is set, a TypeError is raised if no value exists.
+        """
+        if self.has_value:
+            return str(self._properties.get(self._property_name, default))
+
+        if default is None:
+            raise TypeError("No value attribute available")
+        return default
+
     def int_value(self, default: int | None = None) -> int:
         """Returns the value converted to int or default if
         conversion failes or the object has no value.
@@ -346,7 +403,7 @@ class ValueModel:
         conversion failes or the object has no value.
 
         Raises:
-        If no default is set, a  TypeError is raised for invalid values.
+        If no default is set, a TypeError is raised for invalid values.
         """
         try:
             return float(self._properties.get(self._property_name))
@@ -371,6 +428,25 @@ class ValueModel:
             if isinstance(value, (int, float)):
                 return value != 0
             raise TypeError(f"Value cannot be converted to bool {value}")
+        except TypeError as ex:
+            if default is None:
+                raise ex
+            return default
+
+    def dict_value(self, default: dict | None = None) -> dict:
+        """Returns the value converted to a dict or default if
+        conversion failes or the object has no value.
+
+        Raises:
+        If no default is set, an error is raised for invalid values.
+        """
+        try:
+            value = self._properties.get(self._property_name)
+            if isinstance(value, dict):
+                return value
+            if isinstance(value, str):
+                return json.loads(value)
+            raise TypeError(f"Value cannot be converted to dict {value}")
         except TypeError as ex:
             if default is None:
                 raise ex
