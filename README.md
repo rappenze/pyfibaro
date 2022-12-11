@@ -1,6 +1,8 @@
 # pyfibaro
 
 [![license](https://img.shields.io/pypi/l/pyatmo.svg)](https://github.com/rappenze/pyfibaro/blob/main/LICENSE)
+[![pypi package](https://img.shields.io/pypi/v/pyfibaro)](https://pypi.org/project/pyfibaro/)
+![python version](https://img.shields.io/pypi/pyversions/pyfibaro)
 
 This project has no relation to the fibaro company.
 
