@@ -3,7 +3,7 @@
 import logging
 
 from pyfibaro.fibaro_client import FibaroClient
-
+import urllib3
 from . import FIBARO_URL
 
 
@@ -13,6 +13,8 @@ def main():
     logging.basicConfig(level=logging.DEBUG)
 
     print("Start test...")
+
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
     client = FibaroClient(FIBARO_URL)
     info = client.read_info()
