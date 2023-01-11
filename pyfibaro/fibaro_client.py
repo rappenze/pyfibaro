@@ -20,12 +20,21 @@ class FibaroClient:
     Use any other method to access API data and actions
     """
 
-    def __init__(self, url: str) -> None:
+    def __init__(self, url: str, ssl_verify: bool = False) -> None:
         """Init the fibaro client.
 
-        The url needs to be in the format http://<HOST>/api/.
+        The url needs to be in the format http(s)://<HOST>/api/.
+
+        You can use ssl_verify to enable SSL certificate validation, but be
+        aware that you need to register the fibaro certificates yourself
+        to make it work. Also please be aware that the InsecureRequestWarning
+        is not suppressed by default, so if you need to suppress warnings you
+        need something like:
+
+        import urllib3
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         """
-        self._rest_client = RestClient(url)
+        self._rest_client = RestClient(url, ssl_verify)
         self._api_version: int = None
         self._state_handler: FibaroStateHandler = None
 

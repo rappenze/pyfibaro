@@ -17,11 +17,18 @@ class RestClient:
     """Rest client for fibaro home center."""
 
     def __init__(
-        self, url: str, username: str | None = None, password: str | None = None
+        self,
+        url: str,
+        ssl_verify: bool,
+        username: str | None = None,
+        password: str | None = None,
     ) -> None:
         """Init"""
         self._session = Session()
         self._session.headers = HTTP_HEADERS
+        if url.startswith("https"):
+            self._session.verify = ssl_verify
+
         self._base_url = url
         if username and password:
             self.set_auth(username, password)
