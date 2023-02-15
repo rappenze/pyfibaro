@@ -30,12 +30,18 @@ class SceneModel:
     @property
     def room_id(self) -> int:
         """Room id of the scene or 0 if no room is assigned."""
-        return int(self.raw_data.get("roomID", 0))
+        if self._api_version == 4:
+            return int(self.raw_data.get("roomID", 0))
+        else:
+            return int(self.raw_data.get("roomId", 0))
 
     @property
     def visible(self) -> bool:
         """Returns the visible state of the scene."""
-        return self.raw_data.get("visible", True)
+        if self._api_version == 4:
+            return self.raw_data.get("visible", True)
+        else:
+            return not self.raw_data.get("hidden", False)
 
     def start(self) -> None:
         """Start a scene."""
