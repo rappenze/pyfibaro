@@ -1,0 +1,96 @@
+[
+    {
+        "id": 1,
+        "name": "Morning Scenario",
+        "type": "scenario",
+        "roomId": 219,
+        "mode": "automatic",
+        "maxRunningInstances": 2,
+        "icon": "morning",
+        "hidden": false,
+        "protectedByPin": false,
+        "stopOnAlarm": true,
+        "restart": true,
+        "enabled": false,
+        "content": "{\"actions\":\"api.post(\\\"/devices/groupAction/open\\\", json.decode(\\\"{\\\\\\\"filters\\\\\\\":[{\\\\\\\"filter\\\\\\\":\\\\\\\"or\\\\\\\",\\\\\\\"value\\\\\\\":[{\\\\\\\"filter\\\\\\\":\\\\\\\"isTypeOf\\\\\\\",\\\\\\\"value\\\\\\\":[\\\\\\\"com.fibaro.remoteBaseShutter\\\\\\\",\\\\\\\"com.fibaro.baseShutter\\\\\\\"]}]},{\\\\\\\"filter\\\\\\\":\\\\\\\"or\\\\\\\",\\\\\\\"value\\\\\\\":[{\\\\\\\"filter\\\\\\\":\\\\\\\"propertyEquals\\\\\\\",\\\\\\\"value\\\\\\\":[{\\\\\\\"propertyName\\\\\\\":\\\\\\\"deviceRole\\\\\\\",\\\\\\\"propertyValue\\\\\\\":[\\\\\\\"BlindsWithoutPositioning\\\\\\\",\\\\\\\"BlindsWithPositioning\\\\\\\",\\\\\\\"BlindsWithDriver\\\\\\\",\\\\\\\"BlindsWithDriverImpulse\\\\\\\",\\\\\\\"VenetianBlinds\\\\\\\"]}]}]},{\\\\\\\"filter\\\\\\\":\\\\\\\"not\\\\\\\",\\\\\\\"value\\\\\\\":{\\\\\\\"filter\\\\\\\":\\\\\\\"interface\\\\\\\",\\\\\\\"value\\\\\\\":[\\\\\\\"shutterWithSilentMove\\\\\\\"]}},{\\\\\\\"filter\\\\\\\":\\\\\\\"visible\\\\\\\",\\\\\\\"value\\\\\\\":[\\\\\\\"true\\\\\\\"]}]}\\\")) api.post(\\\"/devices/groupAction/silentOpen\\\", json.decode(\\\"{\\\\\\\"filters\\\\\\\":[{\\\\\\\"filter\\\\\\\":\\\\\\\"or\\\\\\\",\\\\\\\"value\\\\\\\":[{\\\\\\\"filter\\\\\\\":\\\\\\\"isTypeOf\\\\\\\",\\\\\\\"value\\\\\\\":[\\\\\\\"com.fibaro.remoteBaseShutter\\\\\\\",\\\\\\\"com.fibaro.baseShutter\\\\\\\"]}]},{\\\\\\\"filter\\\\\\\":\\\\\\\"or\\\\\\\",\\\\\\\"value\\\\\\\":[{\\\\\\\"filter\\\\\\\":\\\\\\\"propertyEquals\\\\\\\",\\\\\\\"value\\\\\\\":[{\\\\\\\"propertyName\\\\\\\":\\\\\\\"deviceRole\\\\\\\",\\\\\\\"propertyValue\\\\\\\":[\\\\\\\"BlindsWithoutPositioning\\\\\\\",\\\\\\\"BlindsWithPositioning\\\\\\\",\\\\\\\"BlindsWithDriver\\\\\\\",\\\\\\\"BlindsWithDriverImpulse\\\\\\\",\\\\\\\"VenetianBlinds\\\\\\\"]}]}]},{\\\\\\\"filter\\\\\\\":\\\\\\\"interface\\\\\\\",\\\\\\\"value\\\\\\\":[\\\\\\\"shutterWithSilentMove\\\\\\\"]}]}\\\"))  \",\"conditions\":\"{\\n  conditions = { {\\n      isTrigger = false,\\n      operator = \\\"match\\\",\\n      property = \\\"cron\\\",\\n      type = \\\"date\\\",\\n      value = { \\\"*\\\", \\\"*\\\", \\\"*\\\", \\\"*\\\", \\\"1,2,3,4,5,6,7\\\", \\\"*\\\" }\\n    }, {\\n      conditions = { {\\n          conditions = { {\\n              isTrigger = true,\\n              operator = \\\"==\\\",\\n              property = \\\"sunrise\\\",\\n              type = \\\"date\\\",\\n              value = 0\\n            } },\\n          operator = \\\"all\\\"\\n        } },\\n      operator = \\\"any\\\"\\n    } },\\n  operator = \\\"all\\\"\\n}\"}",
+        "created": 1648646259,
+        "updated": 1676317846,
+        "isRunning": false,
+        "started": 0,
+        "scenarioData": {
+            "type": "morningBlinds",
+            "version": 2,
+            "what": {
+                "action": {
+                    "args": [],
+                    "name": "open"
+                }
+            },
+            "when": {
+                "daysOfWeek": [
+                    "monday",
+                    "tuesday",
+                    "wednesday",
+                    "thursday",
+                    "friday",
+                    "saturday",
+                    "sunday"
+                ]
+            },
+            "where": {
+                "wholeHouse": true
+            }
+        },
+        "categories": [
+            3
+        ],
+        "sortOrder": 1
+    },
+    {
+        "id": 2,
+        "name": "Evening Scenario",
+        "type": "scenario",
+        "roomId": 219,
+        "mode": "automatic",
+        "maxRunningInstances": 2,
+        "icon": "evening",
+        "hidden": false,
+        "protectedByPin": false,
+        "stopOnAlarm": true,
+        "restart": true,
+        "enabled": false,
+        "content": "{\"conditions\":\"{\\n  conditions = { {\\n      isTrigger = false,\\n      operator = \\\"match\\\",\\n      property = \\\"cron\\\",\\n      type = \\\"date\\\",\\n      value = { \\\"*\\\", \\\"*\\\", \\\"*\\\", \\\"*\\\", \\\"1,2,3,4,5,6,7\\\", \\\"*\\\" }\\n    }, {\\n      conditions = { {\\n          conditions = { {\\n              isTrigger = true,\\n              operator = \\\"==\\\",\\n              property = \\\"sunset\\\",\\n              type = \\\"date\\\",\\n              value = 0\\n            } },\\n          operator = \\\"all\\\"\\n        } },\\n      operator = \\\"any\\\"\\n    } },\\n  operator = \\\"all\\\"\\n}\",\"actions\":\"api.post(\\\"/devices/groupAction/close\\\", json.decode(\\\"{\\\\\\\"filters\\\\\\\":[{\\\\\\\"filter\\\\\\\":\\\\\\\"or\\\\\\\",\\\\\\\"value\\\\\\\":[{\\\\\\\"filter\\\\\\\":\\\\\\\"isTypeOf\\\\\\\",\\\\\\\"value\\\\\\\":[\\\\\\\"com.fibaro.remoteBaseShutter\\\\\\\",\\\\\\\"com.fibaro.baseShutter\\\\\\\"]}]},{\\\\\\\"filter\\\\\\\":\\\\\\\"or\\\\\\\",\\\\\\\"value\\\\\\\":[{\\\\\\\"filter\\\\\\\":\\\\\\\"propertyEquals\\\\\\\",\\\\\\\"value\\\\\\\":[{\\\\\\\"propertyName\\\\\\\":\\\\\\\"deviceRole\\\\\\\",\\\\\\\"propertyValue\\\\\\\":[\\\\\\\"BlindsWithoutPositioning\\\\\\\",\\\\\\\"BlindsWithPositioning\\\\\\\",\\\\\\\"BlindsWithDriver\\\\\\\",\\\\\\\"BlindsWithDriverImpulse\\\\\\\",\\\\\\\"VenetianBlinds\\\\\\\"]}]}]},{\\\\\\\"filter\\\\\\\":\\\\\\\"not\\\\\\\",\\\\\\\"value\\\\\\\":{\\\\\\\"filter\\\\\\\":\\\\\\\"interface\\\\\\\",\\\\\\\"value\\\\\\\":[\\\\\\\"shutterWithSilentMove\\\\\\\"]}},{\\\\\\\"filter\\\\\\\":\\\\\\\"visible\\\\\\\",\\\\\\\"value\\\\\\\":[\\\\\\\"true\\\\\\\"]}]}\\\")) api.post(\\\"/devices/groupAction/silentClose\\\", json.decode(\\\"{\\\\\\\"filters\\\\\\\":[{\\\\\\\"filter\\\\\\\":\\\\\\\"or\\\\\\\",\\\\\\\"value\\\\\\\":[{\\\\\\\"filter\\\\\\\":\\\\\\\"isTypeOf\\\\\\\",\\\\\\\"value\\\\\\\":[\\\\\\\"com.fibaro.remoteBaseShutter\\\\\\\",\\\\\\\"com.fibaro.baseShutter\\\\\\\"]}]},{\\\\\\\"filter\\\\\\\":\\\\\\\"or\\\\\\\",\\\\\\\"value\\\\\\\":[{\\\\\\\"filter\\\\\\\":\\\\\\\"propertyEquals\\\\\\\",\\\\\\\"value\\\\\\\":[{\\\\\\\"propertyName\\\\\\\":\\\\\\\"deviceRole\\\\\\\",\\\\\\\"propertyValue\\\\\\\":[\\\\\\\"BlindsWithoutPositioning\\\\\\\",\\\\\\\"BlindsWithPositioning\\\\\\\",\\\\\\\"BlindsWithDriver\\\\\\\",\\\\\\\"BlindsWithDriverImpulse\\\\\\\",\\\\\\\"VenetianBlinds\\\\\\\"]}]}]},{\\\\\\\"filter\\\\\\\":\\\\\\\"interface\\\\\\\",\\\\\\\"value\\\\\\\":[\\\\\\\"shutterWithSilentMove\\\\\\\"]}]}\\\"))  \"}",
+        "created": 1648646338,
+        "updated": 1672822254,
+        "isRunning": false,
+        "started": 0,
+        "scenarioData": {
+            "type": "eveningBlinds",
+            "version": 2,
+            "what": {
+                "action": {
+                    "args": [],
+                    "name": "close"
+                }
+            },
+            "when": {
+                "daysOfWeek": [
+                    "monday",
+                    "tuesday",
+                    "wednesday",
+                    "thursday",
+                    "friday",
+                    "saturday",
+                    "sunday"
+                ]
+            },
+            "where": {
+                "wholeHouse": true
+            }
+        },
+        "categories": [
+            3
+        ],
+        "sortOrder": 2
+    }
+]
