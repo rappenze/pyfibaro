@@ -17,7 +17,7 @@ class InfoModel:
     @property
     def current_version(self) -> str:
         """Returns the software version."""
-        return self.raw_data.get("currentVersion").get("version")
+        return self.raw_data.get("softVersion")
 
     @property
     def serial_number(self) -> str:
