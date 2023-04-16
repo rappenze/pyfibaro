@@ -146,6 +146,28 @@ class DeviceModel:
         return "armed" in self.properties
 
     @property
+    def dead(self) -> bool:
+        """Returns the state if the device is reachable if supported,
+        otherwise False is returned.
+        """
+        return _to_bool(self.properties.get("dead", False))
+
+    @property
+    def has_dead(self) -> bool:
+        """Returns true if the device has a dead property."""
+        return "dead" in self.properties
+
+    @property
+    def dead_reason(self) -> str | None:
+        """Returns the dead reason or None if not supported."""
+        return self.properties.get("deadReason")
+
+    @property
+    def has_dead_reason(self) -> bool:
+        """Returns true if the device has a deadReason property."""
+        return "deadReason" in self.properties
+
+    @property
     def value(self) -> ValueModel:
         """Returns the value info."""
         return ValueModel(self.properties, "value")

@@ -80,6 +80,10 @@ def test_fibaro_device() -> None:
         assert devices[0].has_heating_thermostat_setpoint_future is False
         assert devices[0].heating_thermostat_setpoint_future == 0
         assert devices[0].target_level == 0
+        assert devices[0].has_dead is True
+        assert devices[0].dead is False
+        assert devices[0].has_dead_reason is False
+        assert devices[0].dead_reason is None
 
         assert isinstance(devices[0].actions, dict)
         assert isinstance(devices[0].properties, dict)
