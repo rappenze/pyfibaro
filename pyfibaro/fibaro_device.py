@@ -227,7 +227,7 @@ class DeviceModel:
         """Returns the supported modes, for example for fan or hvac devices."""
         if "supportedModes" in self.properties:
             modes = self.properties.get("supportedModes")
-            if isinstance(modes, str):
+            if isinstance(modes, str) and modes != "":
                 return [int(mode) for mode in modes.split(",")]
             if isinstance(modes, list):
                 return [int(mode) for mode in modes]
@@ -253,7 +253,7 @@ class DeviceModel:
         """Returns the supported operating modes, for example for fan or hvac devices."""
         if "supportedOperatingModes" in self.properties:
             modes = self.properties.get("supportedOperatingModes")
-            if isinstance(modes, str):
+            if isinstance(modes, str) and modes != "":
                 return [int(mode) for mode in modes.split(",")]
             if isinstance(modes, list):
                 return [int(mode) for mode in modes]

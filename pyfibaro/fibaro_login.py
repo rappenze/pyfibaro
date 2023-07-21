@@ -12,5 +12,5 @@ class LoginModel:
 
     @property
     def is_logged_in(self) -> bool:
-        """Returns the software version."""
+        """Returns the login status."""
         return self.raw_data.get("status")
