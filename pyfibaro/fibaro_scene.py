@@ -12,7 +12,7 @@ class SceneModel:
     """Model of a scene."""
 
     def __init__(self, data: dict, rest_client: RestClient, api_version: int) -> None:
-        """One scne."""
+        """One scene."""
         self.raw_data = data
         self._rest_client = rest_client
         self._api_version = api_version
@@ -43,27 +43,34 @@ class SceneModel:
         else:
             return not self.raw_data.get("hidden", False)
 
-    def start(self) -> None:
+    def start(self, user_pin: str | None = None) -> None:
         """Start a scene."""
         if self._api_version == 4:
+            if user_pin:
+                raise NotImplementedError("Not supported on old fibaro hubs")
             self._send_action_v4("start")
         else:
-            self._send_action_v5("execute")
+            self._send_action_v5("execute", user_pin)
 
-    def stop(self) -> None:
+    def stop(self, user_pin: str | None = None) -> None:
         """Stop a scene."""
         if self._api_version == 4:
+            if user_pin:
+                raise NotImplementedError("Not supported on old fibaro hubs")
             self._send_action_v4("stop")
         else:
-            self._send_action_v5("kill")
+            self._send_action_v5("kill", user_pin)
 
     def _send_action_v4(self, action: str) -> None:
         url = f"scenes/{self.fibaro_id}/action/{action}"
         self._rest_client.post(url)
 
-    def _send_action_v5(self, action: str) -> None:
+    def _send_action_v5(self, action: str, user_pin: str | None) -> None:
         url = f"scenes/{self.fibaro_id}/{action}"
-        self._rest_client.post(url, {})
+        if user_pin:
+            self._rest_client.post(url, {}, http_headers={"Fibaro-User-PIN": user_pin})
+        else:
+            self._rest_client.post(url, {})
 
     @staticmethod
     def read_scenes(rest_client: RestClient, api_version: int) -> list[SceneModel]:
