@@ -38,23 +38,37 @@ class RestClient:
         self._session.auth = HTTPBasicAuth(username, password)
 
     def get(
-        self, endpoint: str, json: Any | None = None, timeout: int | None = None
+        self,
+        endpoint: str,
+        json: Any | None = None,
+        timeout: int | None = None,
+        http_headers: dict = None,
     ) -> Any:
         """Execute a get request."""
         current_timeout = timeout if timeout else DEFAULT_TIMEOUT
         response = self._session.get(
-            f"{self._base_url}{endpoint}", json=json, timeout=current_timeout
+            f"{self._base_url}{endpoint}",
+            json=json,
+            timeout=current_timeout,
+            headers=http_headers,
         )
 
         return self._process_json_result(response)
 
     def post(
-        self, endpoint: str, json: Any | None = None, timeout: int | None = None
+        self,
+        endpoint: str,
+        json: Any | None = None,
+        timeout: int | None = None,
+        http_headers: dict = None,
     ) -> Any:
         """Execute a post request."""
         current_timeout = timeout if timeout else DEFAULT_TIMEOUT
         response = self._session.post(
-            f"{self._base_url}{endpoint}", json=json, timeout=current_timeout
+            f"{self._base_url}{endpoint}",
+            json=json,
+            timeout=current_timeout,
+            headers=http_headers,
         )
 
         return self._process_json_result(response)

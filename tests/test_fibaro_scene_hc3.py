@@ -35,6 +35,7 @@ def test_fibaro_scene() -> None:
         assert scenes[0].visible is True
         assert mock.call_count == 3
 
+
 def test_fibaro_scene_start() -> None:
     """Test get request"""
     with requests_mock.Mocker() as mock:
@@ -52,7 +53,7 @@ def test_fibaro_scene_start() -> None:
         scenes = client.read_scenes()
 
         assert mock.call_count == 3
-        scenes[0].start()
+        scenes[0].start("1234")
         assert mock.call_count == 4
 
 
