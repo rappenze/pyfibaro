@@ -330,7 +330,7 @@ class DeviceModel:
 
     @property
     def central_scene_event(self) -> list[SceneEvent]:
-        """Returns true if the device can issue central scene events."""
+        """Returns list of potential scene events."""
         central_scene_support = []
         value = self.properties.get("centralSceneSupport")
         if isinstance(value, list):
