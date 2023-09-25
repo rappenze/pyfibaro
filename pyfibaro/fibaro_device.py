@@ -323,6 +323,28 @@ class DeviceModel:
         """Returns the target level or 0 if there is no value."""
         return float(self.properties.get("targetLevel", 0.0))
 
+    @property
+    def has_central_scene_event(self) -> bool:
+        """Returns true if the device can issue central scene events."""
+        return "centralSceneSupport" in self.properties
+
+    @property
+    def central_scene_event(self) -> list[SceneEvent]:
+        """Returns true if the device can issue central scene events."""
+        central_scene_support = []
+        value = self.properties.get("centralSceneSupport")
+        if isinstance(value, list):
+            central_scene_support = value
+        if isinstance(value, str):
+            central_scene_support = json.loads(value)
+
+        result = []
+        for central_scene in central_scene_support:
+            key_id = int(central_scene.get("keyId"))
+            key_attributes = central_scene.get("keyAttributes")
+            result.append(SceneEvent(key_id, key_attributes))
+        return result
+
     def execute_action(self, action: str, arguments: list[Any] | None = None) -> Any:
         """Execute a device action.
 
@@ -511,3 +533,22 @@ class ColorModel:
         if len(rgbw) != 4:
             raise TypeError(f"Color does not have 4 parts: {color}")
         return rgbw
+
+
+class SceneEvent:
+    """Model to read out the scene events."""
+
+    def __init__(self, key_id: int, key_attributes: list[str]) -> None:
+        """Constructor."""
+        self._key_id = key_id
+        self._key_attributes = key_attributes
+
+    @property
+    def key_id(self) -> int:
+        """Returns the key id."""
+        return self._key_id
+
+    @property
+    def key_event_types(self) -> list[str]:
+        """Returns the possible key event types."""
+        return self._key_attributes
