@@ -125,8 +125,9 @@ class DeviceModel:
 
     @property
     def battery_level(self) -> int:
-        """Returns the battery level of the device."""
-        return int(self.properties.get("batteryLevel", 0))
+        """Returns the battery level of the device in percent."""
+        percent = int(self.properties.get("batteryLevel", 0))
+        return 0 if percent == 255 else percent
 
     @property
     def has_battery_level(self) -> bool:
@@ -381,7 +382,8 @@ class DeviceModel:
             if device.get("type") in IGNORE_DEVICE:
                 _LOGGER.debug("Ignore device: %s", device.get("id"))
             elif "id" not in device or "name" not in device:
-                _LOGGER.debug("Ignore device because it does not contain id or name")
+                _LOGGER.debug(
+                    "Ignore device because it does not contain id or name")
             else:
                 devices.append(device)
         return [DeviceModel(data, rest_client, api_version) for data in devices]
