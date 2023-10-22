@@ -15,7 +15,8 @@ def test_extract_info() -> None:
     """Test get request"""
     with requests_mock.Mocker() as mock:
         assert isinstance(mock, requests_mock.Mocker)
-        mock.register_uri("GET", f"{TEST_BASE_URL}settings/info", json=info_payload)
+        mock.register_uri(
+            "GET", f"{TEST_BASE_URL}settings/info", json=info_payload)
         client = RestClient(TEST_BASE_URL, TEST_USERNAME, TEST_PASSWORD)
 
         fibaro_info = InfoModel(client)
@@ -25,13 +26,15 @@ def test_extract_info() -> None:
         assert fibaro_info.current_version == "4.630"
         assert fibaro_info.hc_name == "My Home"
         assert fibaro_info.serial_number == "HC2-011111"
+        assert fibaro_info.platform == "HC2"
 
 
 def test_api_version_hc2() -> None:
     """Test get request"""
     with requests_mock.Mocker() as mock:
         assert isinstance(mock, requests_mock.Mocker)
-        mock.register_uri("GET", f"{TEST_BASE_URL}settings/info", json=info_payload)
+        mock.register_uri(
+            "GET", f"{TEST_BASE_URL}settings/info", json=info_payload)
         client = RestClient(TEST_BASE_URL, TEST_USERNAME, TEST_PASSWORD)
 
         fibaro_info = InfoModel(client)
@@ -81,7 +84,8 @@ def test_fibaro_info() -> None:
     with requests_mock.Mocker() as mock:
         assert isinstance(mock, requests_mock.Mocker)
 
-        mock.register_uri("GET", f"{TEST_BASE_URL}settings/info", json=info_payload)
+        mock.register_uri(
+            "GET", f"{TEST_BASE_URL}settings/info", json=info_payload)
         client = FibaroClient(TEST_BASE_URL)
         client.set_authentication(TEST_USERNAME, TEST_PASSWORD)
 

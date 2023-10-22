@@ -38,6 +38,17 @@ class InfoModel:
         serial_number = self.serial_number
         for item in API_VERSION_MATCHER.items():
             if serial_number.startswith(item[0]):
-                _LOGGER.debug("API version %s found by pattern %s", item[1], item[0])
+                _LOGGER.debug(
+                    "API version %s found by pattern %s", item[1], item[0])
                 return item[1]
         return 4
+
+    @property
+    def platform(self) -> str:
+        """Returns the model of the home center.
+
+        One of HC3, HC3L, YH, HC2 or HCL.
+        """
+        # This API is only available on newer models, therefore
+        # we simulate an answer for older models.
+        return self.raw_data.get("platform", self.serial_number[:3])
