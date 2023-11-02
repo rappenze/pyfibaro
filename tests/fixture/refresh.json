@@ -13,6 +13,14 @@
                 "oldValue": 232.08,
                 "newValue": 232.87
             }
+        },
+        {
+            "type": "PowerMetricsChangedEvent",
+            "created": 1698950464,
+            "data": {
+                "consumptionPower": 345.408,
+                "productionPower": 0.0
+            }
         }
     ],
     "changes": [

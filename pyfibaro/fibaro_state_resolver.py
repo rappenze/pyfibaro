@@ -22,11 +22,14 @@ class FibaroEvent:
         return self.raw_data.get("type", "")
 
     @property
-    def fibaro_id(self) -> int:
-        """The device id which throws the event."""
+    def fibaro_id(self) -> int | None:
+        """The device id which throws the event. Not all events are related to a device."""
         data = self.event_data
         # id is used by HC3, deviceId by HC2
-        return int(data.get("id", data.get("deviceId")))
+        fibaro_id = data.get("id", data.get("deviceId"))
+        if fibaro_id is None:
+            return None
+        return int(fibaro_id)
 
     @property
     def event_data(self) -> dict:
