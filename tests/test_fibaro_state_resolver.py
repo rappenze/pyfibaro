@@ -14,11 +14,16 @@ def test_fibaro_state_resolver_event() -> None:
     resolver = FibaroStateResolver(refresh_payload)
     events = resolver.get_events()
     assert events is not None
-    assert len(events) == 1
+    assert len(events) == 2
     assert events[0].event_type == "DevicePropertyUpdatedEvent"
     assert events[0].fibaro_id == 28
     assert events[0].key_event_type == ""
     assert events[0].key_id == 0
+
+    assert events[1].event_type == "PowerMetricsChangedEvent"
+    assert events[1].fibaro_id is None
+    assert events[1].key_event_type == ""
+    assert events[1].key_id == 0
 
 
 def test_fibaro_state_resolver_state_update() -> None:
