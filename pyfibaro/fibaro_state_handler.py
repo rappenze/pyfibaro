@@ -20,11 +20,11 @@ class FibaroStateHandler(threading.Thread):
         super().__init__(name=f"Thread {__name__}")
 
         self._rest_client = rest_client
-        self.callback = callback
+        self._callback = callback
+        self._stop_flag = threading.Event()
+
         # stop unconditionally on exit
         self.daemon = True
-
-        self._stop_flag = threading.Event()
 
         self.start()
 
@@ -39,10 +39,7 @@ class FibaroStateHandler(threading.Thread):
             attempt = 1
             success = False
 
-            while not success:
-                if self._is_stopped_flag():
-                    break
-
+            while not success and not self._is_stopped_flag():
                 try:
                     state = self._rest_client.get(
                         f"refreshStates?last={last}", timeout=REFRESH_STATE_TIMEOUT
@@ -50,8 +47,6 @@ class FibaroStateHandler(threading.Thread):
                     _LOGGER.debug(state)
 
                     last = state.get("last")
-                    self.callback(state)
-
                     success = True
                 except Exception as ex:
                     _LOGGER.warning("Connection Error (%s). Error: %s", attempt, ex)
@@ -59,9 +54,16 @@ class FibaroStateHandler(threading.Thread):
 
                     if attempt == 3:
                         sleep_time = 30
-                        _LOGGER.warning("Fallback to 30-second connection retry timer.")
+                        _LOGGER.info("Fallback to 30-second connection retry timer.")
 
                     self._stop_flag.wait(sleep_time)
+
+                if success:
+                    try:
+                        self._callback(state)
+                    except Exception as ex:
+                        _LOGGER.warning("Error in state change callback: %s", ex)
+
 
         _LOGGER.info("State change handler stopped.")
 
