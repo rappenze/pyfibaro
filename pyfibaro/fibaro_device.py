@@ -516,7 +516,7 @@ class ColorModel:
             try:
                 self.rgbw_color
                 return True
-            except TypeError:
+            except (TypeError, ValueError):
                 return False
         return False
 
