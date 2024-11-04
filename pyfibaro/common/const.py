@@ -14,7 +14,7 @@ HTTP_HEADERS = {
 }
 
 # Match serial number prefix to a interface version
-API_VERSION_MATCHER = {"HC2": 4, "HCL": 4, "HC3": 5, "HC3L": 5, "YH": 5}
+API_VERSION_MATCHER = {"HC2": 4, "HCL": 4, "HC3": 5, "HC3L": 5, "YH": 5, "ZB": 5}
 
 # Devices which are ignored
 # iOS_device includes iOS and Android devices
