@@ -6,11 +6,14 @@
 
 This project has no relation to the fibaro company.
 
-Simple API to access fibaro home center from Python 3. For more detailed information see
+Simple API to access fibaro home center from Python 3. For more detailed information about the API see
 
 [Home center 2 / Home center lite](https://manuals.fibaro.com/knowledge-base-browse/rest-api/)
 
 [Home center 3 / Home center 3 lite / Yubii Home](https://www.fibaro.com/dev/)
+
+The [Zooz Z-Box Hub](https://zboxhub.com/) is powered as well by Software from Fibaro and supports currently the same API. This means
+that the pyfibaro library as well supports the Zooz Z-Box Hub (this support is untested as there is no public API documentation about the Zooz Z-Box Hub).
 
 The pyfibaro library was created for integrating the fibaro home center with home assistant but can be used also in other projects.
 
