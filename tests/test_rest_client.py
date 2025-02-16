@@ -13,7 +13,8 @@ def test_get_request() -> None:
     """Test get request"""
     with requests_mock.Mocker() as mock:
         assert isinstance(mock, requests_mock.Mocker)
-        mock.register_uri("GET", f"{TEST_BASE_URL}settings/info", json=info_payload)
+        mock.register_uri(
+            "GET", f"{TEST_BASE_URL}settings/info", json=info_payload)
         client = RestClient(TEST_BASE_URL, False, TEST_USERNAME, TEST_PASSWORD)
         response = client.get("settings/info")
 
@@ -38,7 +39,8 @@ def test_post_request() -> None:
     """Test post request"""
     with requests_mock.Mocker() as mock:
         assert isinstance(mock, requests_mock.Mocker)
-        mock.register_uri("POST", f"{TEST_BASE_URL}settings/info", json=info_payload)
+        mock.register_uri(
+            "POST", f"{TEST_BASE_URL}settings/info", json=info_payload)
         client = RestClient(TEST_BASE_URL, False, TEST_USERNAME, TEST_PASSWORD)
         response = client.post("settings/info", info_payload)
 

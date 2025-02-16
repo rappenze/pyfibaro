@@ -1,4 +1,4 @@
-"""Test FibaroStateHandler class."""
+"""Test FibaroStateResolver class."""
 
 
 from pyfibaro.fibaro_state_resolver import FibaroStateResolver
@@ -31,7 +31,7 @@ def test_fibaro_state_resolver_state_update() -> None:
     resolver = FibaroStateResolver(refresh_payload)
     changes = resolver.get_state_updates()
     assert changes is not None
-    assert len(changes) == 1
+    assert len(changes) == 2
     assert changes[0].fibaro_id == 28
     assert changes[0].property_changes == {"value": "232.88"}
 

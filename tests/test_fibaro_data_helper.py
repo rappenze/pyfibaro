@@ -1,0 +1,82 @@
+"""Test data helpers."""
+
+from unittest.mock import Mock
+
+from pyfibaro.fibaro_data_helper import (
+    read_devices,
+    read_rooms,
+    read_scenes,
+    get_hub_information,
+)
+from pyfibaro.fibaro_device import DeviceModel
+from pyfibaro.fibaro_info import InfoModel
+from pyfibaro.fibaro_room import RoomModel
+from pyfibaro.fibaro_scene import SceneModel
+
+from .test_utils import load_fixture
+
+scene_payload = load_fixture("scene-hc3.json")
+room_payload = load_fixture("room.json")
+device_payload = load_fixture("device-hc3.json")
+device2_payload = load_fixture("device.json")
+
+
+def test_read_rooms() -> None:
+    """Test read rooms"""
+    client = Mock()
+    client.read_rooms.return_value = [RoomModel(room_payload[0])]
+
+    rooms = read_rooms(client)
+
+    assert len(rooms) == 1
+    assert rooms[4] == "Wohnen"
+
+
+def test_read_scenes() -> None:
+    """Test read scenes"""
+    client = Mock()
+    client.read_scenes.return_value = [SceneModel(scene_payload[0], Mock(), 4)]
+
+    scenes = read_scenes(client)
+
+    assert len(scenes) == 1
+    assert scenes[0].fibaro_id == 1
+    assert scenes[0].name == "Morning Scenario"
+
+
+def test_read_hub_info() -> None:
+    """Test read hub info"""
+    client = Mock()
+    client.read_info.return_value = [InfoModel(Mock())]
+
+    info = get_hub_information(client)
+
+    assert info is not None
+
+
+def test_read_devices_hide_controllers() -> None:
+    """Test read devices"""
+    devices = [
+        DeviceModel(device_payload[0], Mock(), 4),
+        DeviceModel(device_payload[4], Mock(), 4),
+    ]
+    client = Mock()
+    client.read_devices.return_value = devices
+
+    devices = read_devices(client, True)
+
+    assert len(devices) == 0
+
+
+def test_read_devices() -> None:
+    """Test read devices"""
+    devices = [
+        DeviceModel(device2_payload[2], Mock(), 4),
+        DeviceModel(device2_payload[3], Mock(), 4),
+    ]
+    client = Mock()
+    client.read_devices.return_value = devices
+
+    devices = read_devices(client, True)
+
+    assert len(devices) == 2
