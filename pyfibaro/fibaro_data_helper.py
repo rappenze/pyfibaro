@@ -1,4 +1,5 @@
-"""Fibaro data class is a data reader for the different fibaro API endpoints."""
+"""Fibaro data helper provides static method to read and
+process data for the different fibaro API endpoints."""
 
 from pyfibaro.fibaro_client import FibaroClient, InfoModel
 from pyfibaro.fibaro_device import DeviceModel
@@ -29,18 +30,32 @@ def get_hub_information(fibaro_client: FibaroClient) -> InfoModel:
 def read_devices(
     fibaro_client: FibaroClient, include_devices_from_plugins: bool = False
 ) -> list[DeviceModel]:
-    """Read all enabled devices except the once representing the controllers."""
+    """Read all enabled devices."""
     devices = fibaro_client.read_devices()
-
-    controller_ids = _get_controller_ids(devices)
 
     return [
         device
         for device in devices
-        if device.fibaro_id not in controller_ids
-        and (not device.is_plugin or include_devices_from_plugins)
+        if (not device.is_plugin or include_devices_from_plugins)
+        and device.enabled
+    ]
+
+
+def find_master_devices(devices: list[DeviceModel]) -> list[DeviceModel]:
+    """Find master devices only."""
+    controller_ids = _get_controller_ids(devices)
+
+    return [
+        device for device in devices
+        if _is_master_device(device, controller_ids)
     ]
 
 
 def _get_controller_ids(devices: list[DeviceModel]) -> set[int]:
     return {device.fibaro_id for device in devices if device.type in CONTROLLER_TYPES}
+
+
+def _is_master_device(device: DeviceModel, controller_ids: set[int]) -> bool:
+    return device.parent_fibaro_id in controller_ids or (
+        device.parent_fibaro_id == 0 and device.fibaro_id not in controller_ids
+    )

@@ -42,6 +42,8 @@ def test_fibaro_device_manager_add_state_listener() -> None:
 
     remove()
 
+    manager.close()
+
 
 def test_fibaro_device_manager_add_event_listener() -> None:
     """Test manager add event listener."""

@@ -1,5 +1,7 @@
 """Main class for accessing fibaro API."""
 
+from requests import HTTPError
+
 from .common.rest_client import RestClient
 from .fibaro_device import DeviceModel
 from .fibaro_info import InfoModel
@@ -59,6 +61,30 @@ class FibaroClient:
 
         return login.is_logged_in
 
+    def connect_with_credentials(self, username: str, password: str) -> InfoModel:
+        """Connect with given credentials.
+        Translate connect errors to easily differentiate auth and connect failures.
+
+        Returns the hub info if successfully connected.
+        Raises:
+        FibaroAuthenticationFailed: If credentials are invalid
+        FibaroConnectFailed: If connection is not possible
+        """
+        try:
+            self.set_authentication(username, password)
+            LoginModel(self._rest_client)
+
+            # Read the API version as it is needed regularly
+            info = self.read_info()
+            self._api_version = info.api_version
+            return info
+        except HTTPError as http_ex:
+            if http_ex.response.status_code == 403:
+                raise FibaroAuthenticationFailed from http_ex
+            raise FibaroConnectFailed from http_ex
+        except Exception as ex:
+            raise FibaroConnectFailed from ex
+
     def read_info(self) -> InfoModel:
         """Read the info endpoint from home center."""
         return InfoModel(self._rest_client)
@@ -86,3 +112,11 @@ class FibaroClient:
         if self._state_handler:
             self._state_handler.stop()
             self._state_handler = None
+
+
+class FibaroConnectFailed(Exception):
+    """Error to indicate we cannot connect to fibaro home center."""
+
+
+class FibaroAuthenticationFailed(Exception):
+    """Error to indicate that authentication failed on fibaro home center."""

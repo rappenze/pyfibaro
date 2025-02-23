@@ -48,3 +48,7 @@ class FibaroDeviceManager:
     def get_devices(self) -> list[DeviceModel]:
         """Get current devices from Fibaro Home Center."""
         return self._fibaro_state_multiplexer.get_devices()
+
+    def close(self) -> None:
+        """Close push channel."""
+        self._fibaro_state_multiplexer.stop()

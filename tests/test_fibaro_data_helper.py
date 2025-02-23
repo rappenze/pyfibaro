@@ -7,6 +7,7 @@ from pyfibaro.fibaro_data_helper import (
     read_rooms,
     read_scenes,
     get_hub_information,
+    find_master_devices,
 )
 from pyfibaro.fibaro_device import DeviceModel
 from pyfibaro.fibaro_info import InfoModel
@@ -54,18 +55,20 @@ def test_read_hub_info() -> None:
     assert info is not None
 
 
-def test_read_devices_hide_controllers() -> None:
+def test_read_devices_master_devices() -> None:
     """Test read devices"""
     devices = [
         DeviceModel(device_payload[0], Mock(), 4),
+        DeviceModel(device2_payload[2], Mock(), 4),
+        DeviceModel(device2_payload[3], Mock(), 4),
         DeviceModel(device_payload[4], Mock(), 4),
     ]
     client = Mock()
     client.read_devices.return_value = devices
 
-    devices = read_devices(client, True)
+    devices = find_master_devices(devices)
 
-    assert len(devices) == 0
+    assert len(devices) == 1
 
 
 def test_read_devices() -> None:

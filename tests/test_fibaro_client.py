@@ -3,10 +3,10 @@
 import pytest
 import requests_mock
 
-from pyfibaro.fibaro_connection import (
+from pyfibaro.fibaro_client import FibaroClient
+from pyfibaro.fibaro_client import (
     FibaroAuthenticationFailed,
-    FibaroConnection,
-    FibaroConnectFailed,
+    FibaroConnectFailed
 )
 
 from .test_utils import TEST_BASE_URL, TEST_PASSWORD, TEST_USERNAME, load_fixture
@@ -22,10 +22,10 @@ def test_connect_failed_with_exception() -> None:
         mock.register_uri(
             "GET", f"{TEST_BASE_URL}settings/info", json=info_payload)
 
-        connection = FibaroConnection(TEST_BASE_URL)
+        client = FibaroClient(TEST_BASE_URL)
 
         with pytest.raises(FibaroConnectFailed):
-            connection.connect(TEST_USERNAME, TEST_PASSWORD)
+            client.connect_with_credentials(TEST_USERNAME, TEST_PASSWORD)
 
 
 def test_connect_failed_with_http_error() -> None:
@@ -37,10 +37,10 @@ def test_connect_failed_with_http_error() -> None:
         mock.register_uri(
             "GET", f"{TEST_BASE_URL}settings/info", json=info_payload)
 
-        connection = FibaroConnection(TEST_BASE_URL)
+        client = FibaroClient(TEST_BASE_URL)
 
         with pytest.raises(FibaroConnectFailed):
-            connection.connect(TEST_USERNAME, TEST_PASSWORD)
+            client.connect_with_credentials(TEST_USERNAME, TEST_PASSWORD)
 
 
 def test_invalid_authentication() -> None:
@@ -52,10 +52,10 @@ def test_invalid_authentication() -> None:
         mock.register_uri(
             "GET", f"{TEST_BASE_URL}settings/info", json=info_payload)
 
-        connection = FibaroConnection(TEST_BASE_URL)
+        client = FibaroClient(TEST_BASE_URL)
 
         with pytest.raises(FibaroAuthenticationFailed):
-            connection.connect(TEST_USERNAME, TEST_PASSWORD)
+            client.connect_with_credentials(TEST_USERNAME, TEST_PASSWORD)
 
 
 def test_connect_succeed() -> None:
@@ -67,19 +67,8 @@ def test_connect_succeed() -> None:
         mock.register_uri(
             "GET", f"{TEST_BASE_URL}settings/info", json=info_payload)
 
-        connection = FibaroConnection(TEST_BASE_URL)
-        info = connection.connect(TEST_USERNAME, TEST_PASSWORD)
+        client = FibaroClient(TEST_BASE_URL)
+        info = client.connect_with_credentials(TEST_USERNAME, TEST_PASSWORD)
 
-        assert mock.call_count == 3
+        assert mock.call_count == 2
         assert info.raw_data == info_payload
-
-        fibaro_client = connection.fibaro_client()
-        assert fibaro_client is not None
-
-
-def test_fibaro_client_exception_when_called_without_connect() -> None:
-    """Test call sequence incorrect."""
-    connection = FibaroConnection(TEST_BASE_URL)
-
-    with pytest.raises(FibaroConnectFailed):
-        connection.fibaro_client()
