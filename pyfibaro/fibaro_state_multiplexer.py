@@ -55,7 +55,7 @@ class FibaroStateMultiplexer:
     def add_event_listener(
         self, fibaro_id: int, listener: Callable[[FibaroEvent], None]
     ) -> Callable[[], None]:
-        """Add central scene event listener."""
+        """Add event listener."""
         event_listeners = self._event_listeners.setdefault(fibaro_id, [])
         event_listeners.append(listener)
 

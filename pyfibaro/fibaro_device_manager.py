@@ -36,13 +36,17 @@ class FibaroDeviceManager:
         self, fibaro_id: int, listener: Callable[[DeviceModel], None]
     ) -> Callable[[], None]:
         """Add a listener to get property changes.
-        Provides the updated device data."""
+        Provides the updated device data.
+
+        Returns: Callback which can be used to unregister the listener"""
         return self._fibaro_state_multiplexer.add_change_listener(fibaro_id, listener)
 
     def add_event_listener(
         self, fibaro_id: int, listener: Callable[[FibaroEvent], None]
     ) -> Callable[[], None]:
-        """Add central scene event listener."""
+        """Add scene event listener.
+
+        Returns: Callback which can be used to unregister the listener"""
         return self._fibaro_state_multiplexer.add_event_listener(fibaro_id, listener)
 
     def get_devices(self) -> list[DeviceModel]:

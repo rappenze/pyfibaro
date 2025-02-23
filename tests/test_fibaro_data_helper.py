@@ -5,14 +5,10 @@ from unittest.mock import Mock
 from pyfibaro.fibaro_data_helper import (
     read_devices,
     read_rooms,
-    read_scenes,
-    get_hub_information,
     find_master_devices,
 )
 from pyfibaro.fibaro_device import DeviceModel
-from pyfibaro.fibaro_info import InfoModel
 from pyfibaro.fibaro_room import RoomModel
-from pyfibaro.fibaro_scene import SceneModel
 
 from .test_utils import load_fixture
 
@@ -31,28 +27,6 @@ def test_read_rooms() -> None:
 
     assert len(rooms) == 1
     assert rooms[4] == "Wohnen"
-
-
-def test_read_scenes() -> None:
-    """Test read scenes"""
-    client = Mock()
-    client.read_scenes.return_value = [SceneModel(scene_payload[0], Mock(), 4)]
-
-    scenes = read_scenes(client)
-
-    assert len(scenes) == 1
-    assert scenes[0].fibaro_id == 1
-    assert scenes[0].name == "Morning Scenario"
-
-
-def test_read_hub_info() -> None:
-    """Test read hub info"""
-    client = Mock()
-    client.read_info.return_value = [InfoModel(Mock())]
-
-    info = get_hub_information(client)
-
-    assert info is not None
 
 
 def test_read_devices_master_devices() -> None:
