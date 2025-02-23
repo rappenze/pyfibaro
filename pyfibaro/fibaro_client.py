@@ -54,11 +54,7 @@ class FibaroClient:
         HTTPError: If there is a connection problem. Most important is HTTPError
         with status 403 which raised if invalid credentials are provided.
         """
-        login = LoginModel(self._rest_client)
-
-        # Read the API version as it is needed regularly
-        self._api_version = self.read_info().api_version
-
+        login, _ = self._login()
         return login.is_logged_in
 
     def connect_with_credentials(self, username: str, password: str) -> InfoModel:
@@ -72,11 +68,7 @@ class FibaroClient:
         """
         try:
             self.set_authentication(username, password)
-            LoginModel(self._rest_client)
-
-            # Read the API version as it is needed regularly
-            info = self.read_info()
-            self._api_version = info.api_version
+            _, info = self._login()
             return info
         except HTTPError as http_ex:
             if http_ex.response.status_code == 403:
@@ -84,6 +76,15 @@ class FibaroClient:
             raise FibaroConnectFailed from http_ex
         except Exception as ex:
             raise FibaroConnectFailed from ex
+
+    def _login(self) -> tuple[LoginModel, InfoModel]:
+        login = LoginModel(self._rest_client)
+        info = self.read_info()
+
+        # Read the API version as it is needed regularly
+        self._api_version = info.api_version
+
+        return (login, info)
 
     def read_info(self) -> InfoModel:
         """Read the info endpoint from home center."""
