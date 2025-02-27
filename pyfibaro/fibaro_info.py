@@ -35,6 +35,11 @@ class InfoModel:
         return self.raw_data.get("hcName")
 
     @property
+    def mac_address(self) -> str:
+        """Returns the mac address of the home center."""
+        return self.raw_data.get("mac")
+
+    @property
     def api_version(self) -> int:
         """Returns the API version. As of writing version 4 and 5 was supported.
 

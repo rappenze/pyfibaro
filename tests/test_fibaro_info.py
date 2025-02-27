@@ -28,6 +28,7 @@ def test_extract_info() -> None:
         assert fibaro_info.hc_name == "My Home"
         assert fibaro_info.serial_number == "HC2-011111"
         assert fibaro_info.platform == "HC2"
+        assert fibaro_info.mac_address == "00:22:4d:b7:13:24"
 
 
 @pytest.mark.parametrize(
