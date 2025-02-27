@@ -14,7 +14,18 @@ HTTP_HEADERS = {
 }
 
 # Match serial number prefix to a interface version
-API_VERSION_MATCHER = {"HC2": 4, "HCL": 4, "HC3": 5, "HC3L": 5, "YH": 5, "ZB": 5}
+API_VERSION_MATCHER = {"HC2": 4, "HCL": 4,
+                       "HC3": 5, "HC3L": 5, "YH": 5, "ZB": 5}
+
+# Match serial number prefix to the model name
+MODEL_NAME_MATCHER = {"HC2": "Home Center 2", "HCL": "Home Center Lite",
+                      "HC3": "Home Center 3", "HC3L": "Home Center Lite",
+                      "YH": "Yubii Home", "ZB": "Z-Box Hub"}
+
+# Match serial number prefix to the manufacturer
+MANUFACTURER_NAME_MATCHER = {"HC2": "Fibaro", "HCL": "Fibaro",
+                             "HC3": "Fibaro", "HC3L": "Fibaro",
+                             "YH": "Yubii", "ZB": "ZOOZ"}
 
 # Devices which are ignored
 # iOS_device includes iOS and Android devices
