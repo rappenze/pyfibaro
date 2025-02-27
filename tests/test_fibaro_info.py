@@ -1,5 +1,6 @@
 """Test FibaroInfo class."""
 
+import pytest
 import requests_mock
 
 from pyfibaro.common.rest_client import RestClient
@@ -27,29 +28,20 @@ def test_extract_info() -> None:
         assert fibaro_info.hc_name == "My Home"
         assert fibaro_info.serial_number == "HC2-011111"
         assert fibaro_info.platform == "HC2"
+        assert fibaro_info.mac_address == "00:22:4d:b7:13:24"
 
 
-def test_api_version_hc2() -> None:
-    """Test get request"""
-    with requests_mock.Mocker() as mock:
-        assert isinstance(mock, requests_mock.Mocker)
-        mock.register_uri(
-            "GET", f"{TEST_BASE_URL}settings/info", json=info_payload)
-        client = RestClient(TEST_BASE_URL, TEST_USERNAME, TEST_PASSWORD)
-
-        fibaro_info = InfoModel(client)
-
-        assert mock.call_count == 1
-        assert fibaro_info.api_version == 4
-
-
-def test_api_version_hc3() -> None:
-    """Test get request"""
+@pytest.mark.parametrize(
+    "serial_number,api_version", [
+        ("HC3-111111", 5), ("HC2-111111", 4), ("INVALID", 5)]
+)
+def test_api_version(serial_number: str, api_version: int) -> None:
+    """Test API version"""
     with requests_mock.Mocker() as mock:
         assert isinstance(mock, requests_mock.Mocker)
 
         test_payload_copy = info_payload.copy()
-        test_payload_copy["serialNumber"] = "HC3-111111"
+        test_payload_copy["serialNumber"] = serial_number
         mock.register_uri(
             "GET", f"{TEST_BASE_URL}settings/info", json=test_payload_copy
         )
@@ -58,16 +50,24 @@ def test_api_version_hc3() -> None:
         fibaro_info = InfoModel(client)
 
         assert mock.call_count == 1
-        assert fibaro_info.api_version == 5
+        assert fibaro_info.api_version == api_version
 
 
-def test_api_version_invalid() -> None:
-    """Test get request"""
+@pytest.mark.parametrize(
+    "serial_number,name",
+    [
+        ("HC3-111111", "Home Center 3"),
+        ("HC2-111111", "Home Center 2"),
+        ("INVALID", "Hub"),
+    ],
+)
+def test_model_name_resolution(serial_number: str, name: int) -> None:
+    """Test name resolution"""
     with requests_mock.Mocker() as mock:
         assert isinstance(mock, requests_mock.Mocker)
 
         test_payload_copy = info_payload.copy()
-        test_payload_copy["serialNumber"] = "XXXXXXXXXXXX"
+        test_payload_copy["serialNumber"] = serial_number
         mock.register_uri(
             "GET", f"{TEST_BASE_URL}settings/info", json=test_payload_copy
         )
@@ -76,7 +76,34 @@ def test_api_version_invalid() -> None:
         fibaro_info = InfoModel(client)
 
         assert mock.call_count == 1
-        assert fibaro_info.api_version == 4
+        assert fibaro_info.model_name == name
+
+
+@pytest.mark.parametrize(
+    "serial_number,name",
+    [
+        ("HC3-111111", "Fibaro"),
+        ("HC2-111111", "Fibaro"),
+        ("ZB", "ZOOZ"),
+        ("INVALID", "Fibaro"),
+    ],
+)
+def test_manufacturer_name_resolution(serial_number: str, name: int) -> None:
+    """Test name resolution"""
+    with requests_mock.Mocker() as mock:
+        assert isinstance(mock, requests_mock.Mocker)
+
+        test_payload_copy = info_payload.copy()
+        test_payload_copy["serialNumber"] = serial_number
+        mock.register_uri(
+            "GET", f"{TEST_BASE_URL}settings/info", json=test_payload_copy
+        )
+        client = RestClient(TEST_BASE_URL, TEST_USERNAME, TEST_PASSWORD)
+
+        fibaro_info = InfoModel(client)
+
+        assert mock.call_count == 1
+        assert fibaro_info.manufacturer_name == name
 
 
 def test_fibaro_info() -> None:

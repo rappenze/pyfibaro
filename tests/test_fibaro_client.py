@@ -72,3 +72,9 @@ def test_connect_succeed() -> None:
 
         assert mock.call_count == 2
         assert info.raw_data == info_payload
+
+
+def test_frontend_url() -> None:
+    """Test frontend url getter."""
+    client = FibaroClient(TEST_BASE_URL)
+    assert client.frontend_url() == TEST_BASE_URL.removesuffix("/api/")

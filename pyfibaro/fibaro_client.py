@@ -37,6 +37,7 @@ class FibaroClient:
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         """
         self._rest_client = RestClient(url, ssl_verify)
+        self._frontend_url = url.removesuffix("/api/")
         self._api_version: int = None
         self._state_handler: FibaroStateHandler = None
 
@@ -113,6 +114,10 @@ class FibaroClient:
         if self._state_handler:
             self._state_handler.stop()
             self._state_handler = None
+
+    def frontend_url(self) -> str:
+        """Return the url to the web frontend of the fibaro hub."""
+        return self._frontend_url
 
 
 class FibaroConnectFailed(Exception):

@@ -2,6 +2,7 @@
 provides methods to register listeners for specific devices.
 """
 
+import logging
 from typing import Any
 from collections.abc import Callable
 
@@ -9,6 +10,9 @@ from .fibaro_client import FibaroClient
 from .fibaro_device import DeviceModel
 from .fibaro_data_helper import read_devices
 from .fibaro_state_resolver import FibaroEvent, FibaroStateChange, FibaroStateResolver
+
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class FibaroStateMultiplexer:
@@ -91,3 +95,7 @@ class FibaroStateMultiplexer:
         # update the internal data object to keep it always current
         for key, value in state_change.property_changes.items():
             device.properties[key] = value
+            _LOGGER.debug(
+                "New state %s[%s].%s = %s", device.name, device.fibaro_id, key, str(
+                    value)
+            )
