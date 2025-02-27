@@ -64,7 +64,7 @@ class InfoModel:
         return self.raw_data.get("platform", self.serial_number[:3])
 
     @property
-    def model_name(self) -> int:
+    def model_name(self) -> str:
         """Returns the name of the hub model.
 
         When the model cannot be evaluated, it will fallback to Hub.
@@ -76,7 +76,7 @@ class InfoModel:
         return "Hub"
 
     @property
-    def manufacturer_name(self) -> int:
+    def manufacturer_name(self) -> str:
         """Returns the name of the hub model.
 
         When the model cannot be evaluated, it will fallback to Fibaro.
