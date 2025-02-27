@@ -55,7 +55,7 @@ class InfoModel:
 
     @property
     def platform(self) -> str:
-        """Returns the model abbrevation of the home center.
+        """Returns the model abbreviation of the home center.
 
         One of HC3, HC3L, YH, HC2 or HCL.
         """
