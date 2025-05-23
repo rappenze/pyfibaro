@@ -137,7 +137,7 @@
     },
     {
         "id": 12,
-        "name": "Hifi Master",
+        "name": "Hifi Main",
         "roomID": 4,
         "type": "com.fibaro.zwaveDevice",
         "baseType": "com.fibaro.device",

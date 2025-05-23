@@ -1,7 +1,7 @@
 [
     {
         "id": 175,
-        "name": "Licht Roman Master",
+        "name": "Licht Roman Main",
         "roomID": 364,
         "view": [],
         "type": "com.fibaro.zwaveDevice",
