@@ -1,6 +1,6 @@
 {
   "name": "pyfibaro dev",
-  "image": "mcr.microsoft.com/devcontainers/python:1-3.12",
+  "image": "mcr.microsoft.com/devcontainers/python:1-3.13",
   "postCreateCommand": "script/setup",
   "customizations": {
     "vscode": {
