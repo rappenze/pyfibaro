@@ -12,4 +12,3 @@ python -m pip install -r requirements-test.txt
 
 # Tools for distribution to pypi.org
 python -m pip install --upgrade build
-python -m pip install --upgrade twine
