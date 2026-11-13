@@ -276,6 +276,16 @@ class DeviceModel:
         return "thermostatMode" in self.properties
 
     @property
+    def thermostat_fan_mode(self) -> str | None:
+        """Returns the thermostat fan mode or None if there is no thermostat mode."""
+        return self.properties.get("thermostatFanMode")
+
+    @property
+    def has_thermostat_fan_mode(self) -> bool:
+        """Returns true if the device has a thermostat fan mode."""
+        return "thermostatFanMode" in self.properties
+
+    @property
     def thermostat_operating_state(self) -> str | None:
         """Returns the thermostat operating state or None if there
         is no thermostat operating state.
@@ -300,6 +310,18 @@ class DeviceModel:
         return "supportedThermostatModes" in self.properties
 
     @property
+    def supported_thermostat_fan_modes(self) -> list[str]:
+        """Returns the supported thermostat fan modes, for example for hvac devices."""
+        if "supportedThermostatFanModes" in self.properties:
+            return self.properties.get("supportedThermostatFanModes")
+        return []
+
+    @property
+    def has_supported_thermostat_fan_modes(self) -> bool:
+        """Returns true if the device has a supported thermostat fan modes property."""
+        return "supportedThermostatFanModes" in self.properties
+
+    @property
     def heating_thermostat_setpoint(self) -> float:
         """Returns the heating thermostat setpoint or 0 if there is no value."""
         return float(self.properties.get("heatingThermostatSetpoint", 0.0))
@@ -318,6 +340,26 @@ class DeviceModel:
     def has_heating_thermostat_setpoint_future(self) -> bool:
         """Returns true if the device has a heating thermostat setpoint future property."""
         return "heatingThermostatSetpointFuture" in self.properties
+
+    @property
+    def cooling_thermostat_setpoint(self) -> float:
+        """Returns the cooling thermostat setpoint or 0 if there is no value."""
+        return float(self.properties.get("coolingThermostatSetpoint", 0.0))
+
+    @property
+    def has_cooling_thermostat_setpoint(self) -> bool:
+        """Returns true if the device has a cooling thermostat setpoint property."""
+        return "coolingThermostatSetpoint" in self.properties
+
+    @property
+    def cooling_thermostat_setpoint_future(self) -> float:
+        """Returns the cooling thermostat setpoint future or 0 if there is no value."""
+        return float(self.properties.get("coolingThermostatSetpointFuture", 0.0))
+
+    @property
+    def has_cooling_thermostat_setpoint_future(self) -> bool:
+        """Returns true if the device has a cooling thermostat setpoint future property."""
+        return "coolingThermostatSetpointFuture" in self.properties
 
     @property
     def target_level(self) -> float:
