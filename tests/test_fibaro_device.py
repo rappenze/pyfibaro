@@ -21,9 +21,12 @@ def test_fibaro_device() -> None:
     with requests_mock.Mocker() as mock:
         assert isinstance(mock, requests_mock.Mocker)
 
-        mock.register_uri("GET", f"{TEST_BASE_URL}devices", json=device_payload)
-        mock.register_uri("GET", f"{TEST_BASE_URL}loginStatus", json=login_payload)
-        mock.register_uri("GET", f"{TEST_BASE_URL}settings/info", json=info_payload)
+        mock.register_uri(
+            "GET", f"{TEST_BASE_URL}devices", json=device_payload)
+        mock.register_uri(
+            "GET", f"{TEST_BASE_URL}loginStatus", json=login_payload)
+        mock.register_uri(
+            "GET", f"{TEST_BASE_URL}settings/info", json=info_payload)
 
         client = FibaroClient(TEST_BASE_URL)
         client.set_authentication(TEST_USERNAME, TEST_PASSWORD)
@@ -71,14 +74,22 @@ def test_fibaro_device() -> None:
         assert devices[0].supported_operating_modes == []
         assert devices[0].has_thermostat_mode is False
         assert devices[0].thermostat_mode is None
+        assert devices[0].has_thermostat_fan_mode is False
+        assert devices[0].thermostat_fan_mode is None
         assert devices[0].has_thermostat_operating_state is False
         assert devices[0].thermostat_operating_state is None
         assert devices[0].has_supported_thermostat_modes is False
         assert devices[0].supported_thermostat_modes == []
+        assert devices[0].has_supported_thermostat_fan_modes is False
+        assert devices[0].supported_thermostat_fan_modes == []
         assert devices[0].has_heating_thermostat_setpoint is False
         assert devices[0].heating_thermostat_setpoint == 0
         assert devices[0].has_heating_thermostat_setpoint_future is False
         assert devices[0].heating_thermostat_setpoint_future == 0
+        assert devices[0].has_cooling_thermostat_setpoint is False
+        assert devices[0].cooling_thermostat_setpoint == 0
+        assert devices[0].has_cooling_thermostat_setpoint_future is False
+        assert devices[0].cooling_thermostat_setpoint_future == 0
         assert devices[0].target_level == 0
         assert devices[0].has_dead is True
         assert devices[0].dead is False
@@ -213,7 +224,8 @@ def test_fibaro_color() -> None:
 @pytest.mark.parametrize("test_value", ["1,2,3,4", ["1", "2", "3", "4"], [1, 2, 3, 4]])
 def test_fibaro_supported_modes(test_value: Any) -> None:
     """Test modes"""
-    device = DeviceModel({"properties": {"supportedModes": test_value}}, None, 4)
+    device = DeviceModel(
+        {"properties": {"supportedModes": test_value}}, None, 4)
     assert device.supported_modes == [1, 2, 3, 4]
 
 
@@ -239,10 +251,13 @@ def test_fibaro_device_turn_on() -> None:
     with requests_mock.Mocker() as mock:
         assert isinstance(mock, requests_mock.Mocker)
 
-        mock.register_uri("GET", f"{TEST_BASE_URL}devices", json=device_payload)
+        mock.register_uri(
+            "GET", f"{TEST_BASE_URL}devices", json=device_payload)
         mock.register_uri("POST", f"{TEST_BASE_URL}devices/13/action/turnOn")
-        mock.register_uri("GET", f"{TEST_BASE_URL}loginStatus", json=login_payload)
-        mock.register_uri("GET", f"{TEST_BASE_URL}settings/info", json=info_payload)
+        mock.register_uri(
+            "GET", f"{TEST_BASE_URL}loginStatus", json=login_payload)
+        mock.register_uri(
+            "GET", f"{TEST_BASE_URL}settings/info", json=info_payload)
 
         client = FibaroClient(TEST_BASE_URL)
         client.set_authentication(TEST_USERNAME, TEST_PASSWORD)
@@ -260,10 +275,13 @@ def test_fibaro_device_invalid_action() -> None:
     with requests_mock.Mocker() as mock:
         assert isinstance(mock, requests_mock.Mocker)
 
-        mock.register_uri("GET", f"{TEST_BASE_URL}devices", json=device_payload)
+        mock.register_uri(
+            "GET", f"{TEST_BASE_URL}devices", json=device_payload)
         mock.register_uri("POST", f"{TEST_BASE_URL}devices/13/action/XXXX")
-        mock.register_uri("GET", f"{TEST_BASE_URL}loginStatus", json=login_payload)
-        mock.register_uri("GET", f"{TEST_BASE_URL}settings/info", json=info_payload)
+        mock.register_uri(
+            "GET", f"{TEST_BASE_URL}loginStatus", json=login_payload)
+        mock.register_uri(
+            "GET", f"{TEST_BASE_URL}settings/info", json=info_payload)
 
         client = FibaroClient(TEST_BASE_URL)
         client.set_authentication(TEST_USERNAME, TEST_PASSWORD)
@@ -281,10 +299,14 @@ def test_fibaro_device_action_with_param() -> None:
     with requests_mock.Mocker() as mock:
         assert isinstance(mock, requests_mock.Mocker)
 
-        mock.register_uri("GET", f"{TEST_BASE_URL}devices", json=device_payload)
-        mock.register_uri("POST", f"{TEST_BASE_URL}devices/13/action/abortUpdate")
-        mock.register_uri("GET", f"{TEST_BASE_URL}loginStatus", json=login_payload)
-        mock.register_uri("GET", f"{TEST_BASE_URL}settings/info", json=info_payload)
+        mock.register_uri(
+            "GET", f"{TEST_BASE_URL}devices", json=device_payload)
+        mock.register_uri(
+            "POST", f"{TEST_BASE_URL}devices/13/action/abortUpdate")
+        mock.register_uri(
+            "GET", f"{TEST_BASE_URL}loginStatus", json=login_payload)
+        mock.register_uri(
+            "GET", f"{TEST_BASE_URL}settings/info", json=info_payload)
 
         client = FibaroClient(TEST_BASE_URL)
         client.set_authentication(TEST_USERNAME, TEST_PASSWORD)
