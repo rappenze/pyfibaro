@@ -95,6 +95,7 @@ def test_fibaro_device() -> None:
         assert devices[0].dead is False
         assert devices[0].has_dead_reason is False
         assert devices[0].dead_reason is None
+        assert devices[0].device_role is None
 
         assert isinstance(devices[0].actions, dict)
         assert isinstance(devices[0].properties, dict)

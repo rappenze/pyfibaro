@@ -78,6 +78,15 @@ class DeviceModel:
         return interface_name in self.raw_data.get("interfaces", [])
 
     @property
+    def device_role(self) -> str | None:
+        """Returns the device role or None if there is no role.
+
+        A role could be VenetianBlinds for roller blinds with slat positioning.
+        HC2 does not have device role, so only compatible with HC3 and higher.
+        """
+        return self.properties.get("deviceRole")
+
+    @property
     def unit(self) -> str | None:
         """Returns the unit of the devices value attribute or None."""
         return self.properties.get("unit")
